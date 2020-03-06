@@ -33,22 +33,22 @@
 </head>
 
 <body class="text-center">
-    <form class="form-signin">
+    <form class="form-signin" action='login_process.php' method="POST">
         <img class='mb-4' src='courier-delivery.png' alt='Logo' width="102" height="102">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <input type="email" id="inputEmail" name='userid' class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="password" id="inputPassword" name='password' class="form-control" placeholder="Password" required>
 
         <div class=' custom-control custom-radio mb-3'>
             <div>
-                <input type="radio" id="requestor" name="user-type" class="custom-control-input">
-                <label class="custom-control-label" for="requestor">I'm a Requester</label>
+                <input type="radio" id="requester" name="user-type" class="custom-control-input" value='requester' required>
+                <label class="custom-control-label" for="requester">I'm a Requester</label>
             </div>
             <div>
-                <input type="radio" id="travellor" name="user-type" class="custom-control-input">
-                <label class="custom-control-label" for="travellor">I'm a Traveller</label>
+                <input type="radio" id="traveller" name="user-type" class="custom-control-input" value="traveller">
+                <label class="custom-control-label" for="traveller">I'm a Traveller</label>
             </div>
         </div>
           
