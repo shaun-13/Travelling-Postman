@@ -9,7 +9,7 @@ class User {
     private $password;
     private $email;
     
-    public function __construct($userid='', $name='', $travellerid='', $requesterid='', $password=''. $email='') {
+    public function __construct($userid='', $name='', $travellerid='', $requesterid='', $password='', $email='') {
         $this->userid = $userid;
         $this->name = $name;
         $this->travellerid = $travellerid;
