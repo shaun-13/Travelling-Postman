@@ -43,20 +43,37 @@ class Registered(db.Model):
     def json(self):
         return {"po_id": self.po_id, "traveller_id": self.traveller_id, "paid_status": self.paid_status}
 
-@app.route("/allPreOrders")
-def get_all_preOrders():
+# ALL GET/POST functions
+
+# Get all preorders
+@app.route("/preorders")
+def get_all():
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.all()]})
 
-# @app.route("/Registered_Users")
-# def get_all():
-#     return jsonify({"registered users": [registered_users.json() for registered_users in Registered.query.all()]})
+# Create preorder
+@app.route("/preorder/<string:po_id", methods=['POST'])
+def create_preorder():
+    data = request.get_json()
+    preorder = PreOrder(po_id, **data)
+ 
+    try:
+        db.session.add(preorder)
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred while creating the preorder."}), 500
+ 
+    return jsonify(preorder.json()), 201
+
+# Get all registered users
+@app.route("/Registered_Users")
+def get_all():
+    return jsonify({"registered users": [registered_users.json() for registered_users in Registered.query.all()]})
 
 
 #Function for POSTING preorder joined details to payment MS
 
 
 #Function for traveller creating PreOrder [POST]
-
 
 @app.route("/preOrder/<string:po_id>")
 def find_by_poid(po_id):
