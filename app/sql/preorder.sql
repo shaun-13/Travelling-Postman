@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS preorder_details;
 CREATE TABLE IF NOT EXISTS preorder_details (
   po_id int(10) NOT NULL AUTO_INCREMENT,
   traveller_id int(32) NOT NULL,
-  country text NOT NULL,
+  country char(30) NOT NULL,
   end_date date NOT NULL,
   item_name varchar(32) NOT NULL,
   item_category varchar(32) NOT NULL,
