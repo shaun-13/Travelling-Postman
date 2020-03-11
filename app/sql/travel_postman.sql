@@ -46,23 +46,11 @@ CREATE TABLE IF NOT EXISTS `preorder` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
---
-
-DROP TABLE IF EXISTS `product`;
-CREATE TABLE IF NOT EXISTS `product` (
-  `name` varchar(80) CHARACTER SET utf8 DEFAULT NULL,
-  `category` varchar(80) CHARACTER SET utf8 DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `registered_po`
 --
 
-DROP TABLE IF EXISTS `registered_po`;
-CREATE TABLE IF NOT EXISTS `registered_po` (
+DROP TABLE IF EXISTS `registered`;
+CREATE TABLE IF NOT EXISTS `registered` (
   `poid` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
   `requester id` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
   `paid status` tinyint(1) DEFAULT NULL
