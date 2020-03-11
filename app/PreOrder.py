@@ -35,3 +35,10 @@ class PreOrder(db.Model):
 @app.route("/PREORDERURL HERE")
 def get_all():
     return jsonify({"preorder": [preorder.json() for preorder in PreOrder.query.all()]})
+
+
+#Function for POSTING preorder joined details to payment MS
+
+
+#Function for traveller creating PreOrder [POST]
+@
