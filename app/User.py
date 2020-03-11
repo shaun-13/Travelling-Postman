@@ -5,6 +5,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/book'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
  
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)
+
 db = SQLAlchemy(app)
  
 class User(db.Model):
@@ -29,6 +32,7 @@ class User(db.Model):
         return {"userid": self.userid, "name": self.name, "travellerid": self.travellerid, "requesterid": self.requesterid, "password": self.password, "email": self.email}
  
  
-@app.route("/bookURLHERE")
+@app.route("/allUsers")
 def get_all():
     return jsonify({"users": [user.json() for user in User.query.all()]})
+
