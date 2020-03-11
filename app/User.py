@@ -2,37 +2,35 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
  
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/book'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/users'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
- 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
 
 db = SQLAlchemy(app)
  
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'user_details'
  
-    userid = db.Column(db.String(30), primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    travellerid = db.Column(db.String(10), nullable=False)
-    requesterid = db.Column(db.String(10), nullable=False)
-    password = db.Column(db.String(10), nullable=False)
-    email = db.Column(db.String(30), nullable=False)
+    user_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
  
-    def __init__(self, userid, name, travellerid, requesterid, password, email):
-        self.userid = userid
+    def __init__(self, user_id, name):
+        self.user_id = user_id
         self.name = name
-        self.travellerid = travellerid
-        self.requesterid = requesterid
-        self.password = password
-        self.email = email
  
     def json(self):
-        return {"userid": self.userid, "name": self.name, "travellerid": self.travellerid, "requesterid": self.requesterid, "password": self.password, "email": self.email}
+        return {"user_id": self.user_id, "name": self.name}
  
  
-@app.route("/allUsers")
+@app.route("/users")
 def get_all():
-    return jsonify({"users": [user.json() for user in User.query.all()]})
+    return jsonify({"users": [user_details.json() for user_details in User.query.all()]})
 
+# @app.route("/book/<string:isbn13>")
+# def find_by_isbn13(isbn13):
+#     # book = Book.query.filter_by(isbn13=isbn13).first()
+#     # if book:
+#     #     return jsonify(book.json())
+#     return jsonify({"message": "Filtering coming soon!"}), 404
+
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)
