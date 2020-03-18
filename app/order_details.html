@@ -32,6 +32,17 @@
     integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
     crossorigin="anonymous"></script>
 
+  <!-- Paypal buttons -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ensures optimal rendering on mobile devices. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- Optimal Internet Explorer compatibility -->
+
+
+  <body>
+    <script
+      src="https://www.paypal.com/sdk/js?client-id=Afr3mgSgmpxWUSORucSwNlXcJcUrx2VZu25ikYS-N53fqakyK7rd10TRnlU64LKcg0fczeqXP23G24Cl"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    </script>
+  </body>
+
   <!-- Custom styles for this template -->
   <link href="order_details.css" rel="stylesheet">
 </head>
@@ -189,10 +200,11 @@
             <label class="custom-control-label" for="save-info">Save this information for next time</label>
           </div>
           <hr class="mb-4">
+        </form>
 
-          <h4 class="mb-3">Payment</h4>
+          <h4 class="mb-3">Proceed to Payment</h4>
 
-          <div class="d-block my-3">
+          <!-- <div class="d-block my-3">
             <div class="custom-control custom-radio">
               <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
               <label class="custom-control-label" for="credit">Credit card</label>
@@ -242,10 +254,40 @@
           <hr class="mb-4">
           <form action="paypal_button.html">
             <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-          </form>
+          </form> -->
+          
+          <!-- PAYPAL CHECKOUT -->
+          <script
+            src="https://www.paypal.com/sdk/js?client-id=Afr3mgSgmpxWUSORucSwNlXcJcUrx2VZu25ikYS-N53fqakyK7rd10TRnlU64LKcg0fczeqXP23G24Cl"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+          </script>
+        
+          <div id="paypal-button-container">
+            <script>
+              paypal.Buttons({
+                createOrder: function(data, actions) {
+                  // This function sets up the details of the transaction, including the amount and line item details.
+                  return actions.order.create({
+                    purchase_units: [{
+                      amount: {
+                        value: '0.01'
+                      }
+                    }]
+                  });
+                },
+                onApprove: function(data, actions) {
+                  // This function captures the funds from the transaction.
+                  return actions.order.capture().then(function(details) {
+                    // This function shows a transaction success message to your buyer.
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                  });
+                }
+              }).render('#paypal-button-container');
+              //This function displays Smart Payment Buttons on your web page.
+            </script>
+          </div>
+
           
             
-        </form>
       </div>
     </div>
 
