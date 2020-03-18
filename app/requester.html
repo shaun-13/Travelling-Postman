@@ -68,41 +68,40 @@
         <div class="album py-5 bg-light">
             <div class="container">
 
-                <div class="row">
-                    <div class="col-md-4">
+                <div id="posts">
+                <!-- <div class="posts"> -->
+
+                    <!-- <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
-                            <img src='https://upload.wikimedia.org/wikipedia/commons/0/0c/1928_Model_A_Ford.jpg'
-                                class="bd-placeholder-img card-img-top" width="100%" height="225">
+                            
+                            <img src='https://upload.wikimedia.org/wikipedia/commons/0/0c/1928_Model_A_Ford.jpg' class="bd-placeholder-img card-img-top" width="100%" height="225">
                             <div class="card-body">
-                                <p class="card-text">1:72 Scale Model of the 1928 Model A Ford. Source: Ford-Werke GmbH
-                                    Factory, Germany.</p>
-                                <p class="card-text">Source: Dearborn, Michigan, U.S.</p>
-                                <p class="card-text font-weight-bolder">Pre-Order Price: SGD38</p>
+                                <p class="card-text">Source: [COUNTRY HERE]</p>
+                                <p class="card-text font-weight-bolder">Price: [PRICE HERE]</p>
+
                                 <div class='rounded float-right'>
                                     <div>
                                         <img src='https://cdn.pixabay.com/photo/2016/08/31/11/54/user-1633249_960_720.png'
                                             alt='Logo' width="52" height="52">
                                     </div>
                                     <div class='text-center'>
-                                        <small class="text-muted"><strong>Goh Jia Ying</strong></small>
+                                        <small class="text-muted"><strong>[REQUSTER NAME HERE]</strong></small>
                                     </div>
                                 </div>
+
                                 <div class="align-bottom">
                                     <div class="btn-group">
                                         <form action='order_details.html' method='get'>
-                                            <button type='submit' class='btn btn-sm btn-outline-primary' name='payment'
-                                                value=''>Join
-                                                Pre-Order</button>
+                                            <button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value=''>Join Pre-Order</button>
                                             <input type='hidden' value=''><br>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Add To
-                                                Wishlist
-                                            </button>
                                         </form>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
                             <img src='https://upload.wikimedia.org/wikipedia/commons/e/e8/Bottle_with_Fish%2C_Joseon_dynasty_%281392-1910%29%2C_15th-early_16th_century_%28cropped%29.jpg'
@@ -121,6 +120,7 @@
                                         <small class="text-muted"><strong>Zoe Chia</strong></small>
                                     </div>
                                 </div>
+
                                 <div class="align-bottom">
                                     <div class="btn-group">
                                         <form action='order_details.html' method='get'>
@@ -136,12 +136,71 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
 
     </main>
+
+    <script>
+        // Helper function to display error message
+        function showError(message) {
+            // Hide the table and button in the event of error
+            $('#posts').hide();
+     
+            // Display an error under the main container
+            $('#posts').append("<label>"+message+"</label>");
+        }
+     
+        // anonymous async function 
+        // - using await requires the function that calls it to be async
+        $(async() => {            
+            // Change serviceURL to your own
+            var serviceURL = "http://127.0.0.1:5000/preorders";
+     
+            try {
+                const response = await fetch( serviceURL, { method: 'GET' });
+                const data = await response.json();
+                var preorders = data.preorders;
+     
+                if (!preorders || !preorders.length) {
+                    showError('Preorders are empty or undefined.')
+                }
+                else {
+                    // for loop to setup all table rows with obtained book data
+                    var posts = "";
+                    for (const preorder of preorders)
+                    {
+                        posts +=
+                        "<div class='col-md-4'>" +
+                        "<div class='card mb-4 shadow-sm'>" +
+                        "<img src='https://upload.wikimedia.org/wikipedia/commons/0/0c/1928_Model_A_Ford.jpg' class='bd-placeholder-img card-img-top' width='100%' height='225'>" +
+                        "<div class='card-body'>" +
+                        "<p class='card-text'>Source: " + preorder.country + "</p>" +
+                        "<p class='card-text font-weight-bolder'>" + preorder.price + "</p>" +
+                        "<div class='rounded float-right'>" +
+                        "<div><img src='https://cdn.pixabay.com/photo/2016/08/31/11/54/user-1633249_960_720.png' alt='Logo' width='52' height='52'>"
+                        "</div><div class='text-center'>" +
+                        "<small class='text-muted'><strong>[REQUSTER NAME HERE]</strong></small>" +
+                        "</div></div><div class='align-bottom'><div class='btn-group'>" +
+                        "<form action='order_details.html' method='get'>" +
+                        "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value=''>Join Pre-Order</button>" +
+                        "<input type='hidden' value=''><br></form></div></div></div></div></div>";
+                        //posts += "<tbody><tr>" + eachPost + "</tr></tbody>";
+                    }
+                    // add all the rows to the table
+                    $('#posts').append(posts);
+                }
+            } catch (error) {
+                // Errors when calling the service; such as network error, 
+                // service offline, etc
+                showError
+            ('There is a problem retrieving books data, please try again later.<br />'+error);
+           
+            } // error
+        });
+    </script>
 
     <footer class="text-muted">
         <div class="container">

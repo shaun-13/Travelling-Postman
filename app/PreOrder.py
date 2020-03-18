@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
- 
+from flask_cors import CORS
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/preorder'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
  
 db = SQLAlchemy(app)
+CORS(app)
  
 class PreOrder(db.Model):
     __tablename__ = 'preorder_details'
@@ -51,8 +53,8 @@ def get_all():
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.all()]})
 
 # Create preorder
-@app.route("/preorder/<string:po_id", methods=['POST'])
-def create_preorder():
+@app.route("/preorders/:<string:po_id>", methods=['POST'])
+def create_preorder(po_id):
     data = request.get_json()
     preorder = PreOrder(po_id, **data)
  
@@ -66,16 +68,14 @@ def create_preorder():
 
 # Get all registered users
 @app.route("/Registered_Users")
-def get_all():
+def getRegisteredUsers():
     return jsonify({"registered users": [registered_users.json() for registered_users in Registered.query.all()]})
 
 
 #Function for POSTING preorder joined details to payment MS
 
 
-#Function for traveller creating PreOrder [POST]
-
-@app.route("/preOrder/<string:po_id>")
+@app.route("/preorders/<string:po_id>")
 def find_by_poid(po_id):
     preorder = PreOrder.query.filter_by(po_id=po_id).first()
     if preorder:
