@@ -45,6 +45,7 @@ class Registered(db.Model):
     def json(self):
         return {"po_id": self.po_id, "traveller_id": self.traveller_id, "paid_status": self.paid_status}
 
+
 # ALL GET/POST functions
 
 # Get all preorders
@@ -53,13 +54,16 @@ def get_all():
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.all()]})
 
 # Create preorder
-@app.route("/preorders/:<string:po_id>", methods=['POST'])
+@app.route("/preorders/<string:po_id>", methods=['POST'])
 def create_preorder(po_id):
+    # if (PreOrder.query.filter_by(po_id=po_id).first()):
+    #     return jsonify({"message": "A preorder with the id '{}' already exists.".format(po_id)}), 400
+    
     data = request.get_json()
-    preorder = PreOrder(po_id, **data)
+    preorder_details = PreOrder(po_id, **data)
  
     try:
-        db.session.add(preorder)
+        db.session.add(preorder_details)
         db.session.commit()
     except:
         return jsonify({"message": "An error occurred while creating the preorder."}), 500
