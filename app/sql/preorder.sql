@@ -1,15 +1,11 @@
-DROP DATABASE IF EXISTS preorder;
-CREATE DATABASE IF NOT EXISTS preorder;
-USE preorder;
-
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 11, 2020 at 12:27 PM
--- Server version: 5.7.19
--- PHP Version: 7.1.9
+-- Generation Time: Mar 22, 2020 at 04:04 PM
+-- Server version: 5.7.23
+-- PHP Version: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -23,48 +19,45 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: preorder
+-- Database: `preorder`
 --
--- --------------------------------------------------------
-
---
--- Table structure for table preorder_details
---
-
-DROP TABLE IF EXISTS preorder_details;
-CREATE TABLE IF NOT EXISTS preorder_details (
-  po_id int(10) NOT NULL AUTO_INCREMENT,
-  traveller_id int(32) NOT NULL,
-  country char(30) NOT NULL,
-  end_date date NOT NULL,
-  item_name varchar(32) NOT NULL,
-  item_category varchar(32) NOT NULL,
-  price decimal(8,2) NOT NULL,
-  CONSTRAINT preorder_details_pk PRIMARY KEY (po_id)
-
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table preorder_details
---
-
-INSERT INTO preorder_details (po_id, traveller_id, country, end_date, item_name, item_category, price) VALUES
-(1234, 1111111111, 'Singapore', '2020-03-31', 'Witch Broom', 'Witch Crafts', '99.30'),
-(1235, 1111111112, 'Malaysia', '2020-03-27', 'Angsty', 'Cakes', '7.23');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table registered_users
+-- Table structure for table `preorder_details`
 --
 
-DROP TABLE IF EXISTS registered_users;
-CREATE TABLE IF NOT EXISTS registered_users (
-  po_id int(10) NOT NULL,
-  requester_id int(32) NOT NULL,
-  CONSTRAINT registered_users_pk PRIMARY KEY (po_id,requester_id),
-  CONSTRAINT registered_users_fk FOREIGN KEY (po_id) REFERENCES preorder_details(po_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `preorder_details`;
+CREATE TABLE IF NOT EXISTS `preorder_details` (
+  `po_id` int(10) NOT NULL,
+  `traveller_id` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `country` varchar(80) CHARACTER SET utf8 NOT NULL,
+  `end_date` date NOT NULL,
+  `item_name` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `item_category` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `price` decimal(8,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `preorder_details`
+--
+
+INSERT INTO `preorder_details` (`po_id`, `traveller_id`, `country`, `end_date`, `item_name`, `item_category`, `price`) VALUES
+(1, '333', 'Iceland', '2019-01-01', 'chinese bowl', 'food', '23.20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `registered_users`
+--
+
+DROP TABLE IF EXISTS `registered_users`;
+CREATE TABLE IF NOT EXISTS `registered_users` (
+  `po_id` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
+  `requester_id` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
+  `paid_status` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
