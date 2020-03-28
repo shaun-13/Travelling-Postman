@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS preorder;
+CREATE DATABASE IF NOT EXISTS preorder;
+USE preorder;
+
 -- phpMyAdmin SQL Dump
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
@@ -45,7 +49,8 @@ CREATE TABLE IF NOT EXISTS `preorder_details` (
 
 INSERT INTO `preorder_details` (`po_id`, `traveller_id`, `country`, `end_date`, `item_name`, `item_category`, `price`) VALUES
 (1, '333', 'Iceland', '2019-01-01', 'chinese bowl', 'food', '23.20');
-
+(2, '001', 'Singapore', '2020-03-31', 'Witch Broom', 'Witch Crafts', '99.30'),
+(3, '002', 'Malaysia', '2020-03-27', 'Angsty', 'Cakes', '7.23');
 -- --------------------------------------------------------
 
 --
