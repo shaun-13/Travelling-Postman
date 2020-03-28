@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS pre_orders (
   po_id int(10) NOT NULL,
   requester_id int(25) NOT NULL,
   quantity int(255) NOT NULL,
-  PRIMARY KEY (po_id,requestor_id)
+  PRIMARY KEY (po_id,requester_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 COMMIT;
 
