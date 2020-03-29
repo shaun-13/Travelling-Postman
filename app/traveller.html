@@ -61,7 +61,7 @@
             
             <div class="container box">
                 <h1>Travelling somewhere? Open your own Pre-Order!</h1>
-                    <a href="createPreOrder.html" class="btn btn-primary my-2">Open a Pre-Order now</a>
+                    <a href="createPreOrder.html" class="btn btn-primary my-2">Open a Pre-Order</a>
                 </p>
         
             </div>
@@ -109,13 +109,9 @@
                     console.log(data)
 
                     // for loop to setup all table rows with obtained book data
-                    var posts = "";
-                    var date = new Date();
-                    var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+
                     for (const preorder of preorders)
                     {
-                        if (preorders.end_date < date)
-                        {
                             posts +=
                             "<div class='col-md-4'>" +
                             "<div class='card mb-4 shadow-sm'>" +
@@ -129,7 +125,6 @@
                             "<form action='order_details.html' method='get'>" +
                             "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
                             "<input type='hidden' value=''><br></form></div></div></div></div></div>";
-                        }
 
                     }
                     // add all the rows to the table

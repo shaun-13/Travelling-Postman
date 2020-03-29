@@ -96,21 +96,30 @@
                 else {
                     // for loop to setup all table rows with obtained book data
                     var posts = "";
+                    var date = new Date();
+                    var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+
                     for (const preorder of preorders)
                     {
-                        posts +=
-                        "<div class='col-md-4'>" +
-                        "<div class='card mb-4 shadow-sm'>" +
-                        "<div class='card-body'>" +
-                        "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
-                        "<p class='card-text'>Source: " + preorder.country + "</p>" +
-                        "<p class='card-text font-weight-bolder'>" + "Price: $" + preorder.price + "</p>";
+                        var po_date = new Date(preorder.end_date);
+                        var deadline = po_date.getFullYear()+'-'+(po_date.getMonth()+1)+'-'+po_date.getDate();
 
-                        posts +=
-                        "</div><div class='align-bottom'><div class='btn-group'>" +
-                        "<form action='order_details.html' method='get'>" +
-                        "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
-                        "<input type='hidden' value=''><br></form></div></div></div></div></div>";
+                        if (deadline >= today)
+                        {
+                            posts +=
+                            "<div class='col-md-4'>" +
+                            "<div class='card mb-4 shadow-sm'>" +
+                            "<div class='card-body'>" +
+                            "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
+                            "<p class='card-text'>Source: " + preorder.country + "</p>" +
+                            "<p class='card-text font-weight-bolder'>" + "Price: $" + preorder.price + "</p>";
+
+                            posts +=
+                            "</div><div class='align-bottom'><div class='btn-group'>" +
+                            "<form action='order_details.html' method='get'>" +
+                            "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
+                            "<input type='hidden' value=''><br></form></div></div></div></div></div>";
+                        }
                     }
                     // add all the rows to the table
                     $('#posts').append(posts);

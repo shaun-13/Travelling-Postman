@@ -12,13 +12,17 @@ CORS(app)
 class PreOrder(db.Model):
     __tablename__ = 'preorder_details'
  
-    po_id = db.Column(db.String(10), primary_key=True)
+    po_id = db.Column(db.Integer(), primary_key=True)
     traveller_id = db.Column(db.String(32), unique=True, nullable=False)
     country = db.Column(db.String(30), nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     item_name = db.Column(db.String(32), nullable=False)
     item_category = db.Column(db.String(32), nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
+
+    # img_id = db.Column(db.Integer, nullable=False)
+    # img_name = db.Column(db.String(300))
+    # img_data =  db.Column(db.LargeBinary)
  
     def __init__(self, po_id, traveller_id, country, end_date, item_name, item_category, price):
         self.po_id = po_id
@@ -53,11 +57,9 @@ class Registered(db.Model):
 def get_all():
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.all()]})
 
-# Create preorder
+# POST preorder to database
 @app.route("/preorders/<string:po_id>", methods=['POST'])
 def create_preorder(po_id):
-    # if (PreOrder.query.filter_by(po_id=po_id).first()):
-    #     return jsonify({"message": "A preorder with the id '{}' already exists.".format(po_id)}), 400
     
     data = request.get_json()
     preorder_details = PreOrder(po_id, **data)
@@ -68,24 +70,22 @@ def create_preorder(po_id):
     except:
         return jsonify({"message": "An error occurred while creating the preorder."}), 500
  
-    return jsonify(preorder.json()), 201
+    return jsonify(preorder_details.json()), 201
+
+# GET all preorder based on traveller id
+@app.route("/preorders/<string:traveller_id>")
+def get_all_by_traveller(traveller_id):
+    return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.filter_by(traveller_id=traveller_id).all()]})
+
 
 # Get all registered users
 @app.route("/Registered_Users")
 def getRegisteredUsers():
-    return jsonify({"registered users": [registered_users.json() for registered_users in Registered.query.all()]})
-
-
-#Function for POSTING preorder joined details to payment MS
-
+    pass
 
 @app.route("/preorders/<string:po_id>")
 def find_by_poid(po_id):
-    preorder = PreOrder.query.filter_by(po_id=po_id).first()
-    if preorder:
-        return jsonify(preorder.json())
-    return jsonify({'message': 'Pre-Order not found'}), 404
-
+    pass
 
 if __name__=='__main__':
     app.run(port=5000, debug=True)
