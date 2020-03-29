@@ -4,10 +4,11 @@
 
         <!-- Get user id in session when using the app -->
         <script type="text/JavaScript">
-        function getUserid() {
-            var user_id = '<%= Session["user_id"] %>';
-            alert(user_id);
-        }
+            const queryString = window.location.search;
+            console.log(queryString);
+            const urlParams = new URLSearchParams(queryString);
+            const latest_poid = urlParams.get('po_id')
+            console.log(latest_poid);
         </script>
 
         <meta charset="utf-8">
@@ -51,8 +52,6 @@
 
             <h1 class="h3 mb-3 font-weight-normal">Add a Pre Order</h1>
 
-            <div id="errorBox"></div>
-
             <form name="form-add-preorder" id="form-add-preorder">         
                 
                 <div class="form-group">
@@ -93,120 +92,110 @@
                     // Display an error under the main container
                     $('#errorBox').append("<h2>"+message+"</h2>");
                 }
-
-                // function getID() {
-
-                //     const response = await fetch(serviceURL, { method: 'GET' });
-                //     const data = await response.json();
-
-                //     // var response = await fetch(serviceURL, { method: 'GET' });
-                //     // var data = await response.json();
-
-                //     var preorders = data.preorders
-                //     var last_preorder = preorders[preorders.length-1]["po_id"];
-                //     console.log(last_preorder);
-
-                //     return last_preorder + 1;
-                // }
             
                 // anonymous async callback function 
                 $("#form-add-preorder").submit(async(event) => {
-                    event.preventDefault();
-        
-                    var serviceURL = "http://127.0.0.1:5000/preorders/";
-                    var queryURL = "http://127.0.0.1:5000/preorders";
-                    var homeURL = "http://127.0.0.1/Travelling-Postman/app/traveller.html";
+                    //event.preventDefault();
     
-                    try // ISSUE CNA GGE BUT NOT POSTING
+                    //var queryURL = "http://127.0.0.1:5000/preorders";
+                    var homeURL = "http://127.0.0.1/Travelling-Postman/app/traveller.html";
+
+                    
+                    // const response = await fetch(queryURL, { method: 'GET' });
+                    // const data = await response.json();
+
+                    // Get form data & prepare data
+                    var po_id = latest_poid + 1;
+                    var traveller_id = Math.floor(Math.random() * 999) + 100;
+                    var item_name = $('#inputName').val();
+                    var item_category= $('#inputCategory').val();
+                    var country= $('#inputCountry').val();
+                    var price = parseFloat($('#inputPrice').val());
+                    var end_date = Date.parse($('#inputDate').val());
+
+                    try
                     {
-                        // Retrieve latest preorder id
-                        const response = await fetch(queryURL, { method: 'GET' });
-                        const data = await response.json();
+                        const response =
+                        await fetch(serviceURL,
+                                {method: 'POST',
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ title: title, price: price, availability: availability })
+                                });
 
-                        // var response = await fetch(serviceURL, { method: 'GET' });
-                        // var data = await response.json();
+                    const data = await response.json();
 
-                        var preorders = data.preorders
-                        var last_preorder = preorders[preorders.length-1]["po_id"];
-                        console.log(last_preorder);
-
-                        // Get form data & prepare data
-                        var po_id = last_preorder + 1;
-                        // var po_id = getID();
-                        var traveller_id = Math.floor(Math.random() * 999) + 100;
-                        var item_name = $('#inputName').val();
-                        var item_category= $('#inputCategory').val();
-                        var country= $('#inputCountry').val();
-                        var price = parseFloat($('#inputPrice').val());
-                        var deadline = Date.parse($('#inputDate').val());
-
-                        // POST form data to preorder.py and wait for response
-                        serviceURL += po_id;
-                        console.log(serviceURL);
-
-                        const respo = await fetch(serviceURL,
-                                    {method: 'POST',
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ po_id: po_id, traveller_id: traveller_id, country: country, end_date: end_date, item_name: item_name, item_category: item_category, price: price })
-                                    });
-
-                        console.log(respo);
-
-                        const dataPOST = await respo.json();
-            
-                        if (respo.ok) {
+                        if (response.ok)
+                        {
+                            // relocate to home page
                             window.location.replace(homeURL);
                             return false;
                         }
-                        else {
-                            showError(data.message);
+                        else
+                        {
+                            console.error(error);
                         }
+            
                     }
-                    catch (error) {
-                        showError('There is a problem adding the preorder.<br />'+error);
+                    catch (error)
+                    {
+                        // Errors when calling the service; such as network error, 
+                        // service offline, etc
+                        showError
+                        ('There is a problem adding this preorder, please try again later.<br />'+error);
                     }
 
-                    // // Get form data & prepare data
-                    // // var po_id = Math.floor(Math.random() * 101); 
-                    // // var requester_id = Math.floor(Math.random() * 999) + 100;
-                    // var po_id = last_preorder + 1;
-                    // var traveller_id = Math.floor(Math.random() * 999) + 100;
-                    // var item_name = $('#inputName').val();
-                    // var item_category= $('#inputCategory').val();
-                    // var country= $('#inputCountry').val();
-                    // var price = parseFloat($('#inputPrice').val());
-                    // var deadline = Date.parse($('#inputDate').val());
+            ///////////////////
             
-                    // // serviceURL += po_id;
-                    // serviceURL = serviceURL + "/" + po_id;
-                
+
+
                     // try
                     // {
-                    //     const response =
-                    //     await fetch(serviceURL,
-                    //                 {method: 'POST',
-                    //                 headers: { "Content-Type": "application/json" },
-                    //                 body: JSON.stringify({ po_id: po_id, traveller_id: traveller_id, country: country, end_date: end_date, item_name: item_name, item_category: item_category, price: price })
-                    //                 });
+                    //     // Retrieve latest preorder id
+                    //     // const response = await fetch(queryURL, { method: 'GET' });
+                    //     // const data = await response.json();
+                    //     // var preorders = data.preorders
+                    //     // var last_preorder = preorders[preorders.length-1]["po_id"];
 
-                    //     console.log("POST try");
 
-                    //     const data = await response.json();
-            
-                    //     if (response.ok) {
-                    //         // relocate to home page
-                    //         window.location.replace(homeURL);
-                    //         return false;
+
+                    //     // POST form data to preorder.py and wait for response
+                    //     var serviceURL = "http://127.0.0.1:5000/preorders/" + po_id.toString();
+                    //     console.log(serviceURL);
+
+                    //     var requestBody = {po_id: po_id, traveller_id: traveller_id, country: country, end_date: end_date, item_name: item_name, item_category: item_category, price: price};
+
+                    //     async function postData(serviceURL, requestBody)
+
+                    //     var reqParam = 
+                    //     {
+                    //         headers: {"Content-Type":"application/json"},
+                    //         mode: 'no-cors',
+                    //         method: 'POST',
+                    //         body: JSON.stringify(requestBody)
                     //     }
-                    //     else {
-                    //         console.log(data);
-                    //         showError(data.message);
+
+                    //     console.log(reqParam.body);
+
+                    //     try
+                    //     {
+                    //         const response = await fetch(serviceURL, reqParam);
+                    //         data = await response.json();
+
+                    //         if (response.ok)
+                    //         {
+                    //             console.log(data);
+                    //             window.location.replace(homeURL)
+                    //         }
                     //     }
+                    //     catch (error) {
+                    //         console.error(error);
+                    //     }
+                    // }
                     // }
                     // catch (error) {
-                    //     // Errors when calling the service; such as network error, 
-                    //     showError('There is a problem adding this preorder, please try again later.<br />'+error);
+                    //     console.error(error);
                     // }
+
                 });
             </script>
         </div>
