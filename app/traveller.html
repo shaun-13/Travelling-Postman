@@ -69,7 +69,7 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
-                <h1 class="h3 mb-3 font-weight-normal">My Ongoing Pre-Orders</h1><br>
+                <h1 class="h3 mb-3 font-weight-normal">All Pre-orders:</h1><br>
 
 
                 <div class="album py-5 bg-light">
@@ -95,7 +95,7 @@
         {            
             // Change serviceURL to your own
             var traveller_id = sessionStorage.traveller_id;
-            console.log(traveller_id);
+            console.log(typeof traveller_id);
             var serviceURL = "http://127.0.0.1:5000/preorders/" + traveller_id;
      
             try
@@ -104,42 +104,32 @@
                 const data = await response.json();
                 var preorders = data.preorders;
      
-                if (response.ok)
-                {
-                    console.log(data)
+                if (response.ok) {
 
-                    // for loop to setup all table rows with obtained book data
+                    for (const preorder of preorders) {
+                        posts +=
+                        "<div class='col-md-4'>" +
+                        "<div class='card mb-4 shadow-sm'>" +
+                        "<div class='card-body'>" +
+                        "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
+                        "<p class='card-text'>Source: " + preorder.country + "</p>" +
+                        "<p class='card-text font-weight-bolder'>" + "Price: $" + preorder.price + "</p>";
 
-                    for (const preorder of preorders)
-                    {
-                            posts +=
-                            "<div class='col-md-4'>" +
-                            "<div class='card mb-4 shadow-sm'>" +
-                            "<div class='card-body'>" +
-                            "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
-                            "<p class='card-text'>Source: " + preorder.country + "</p>" +
-                            "<p class='card-text font-weight-bolder'>" + "Price: $" + preorder.price + "</p>";
-
-                            posts +=
-                            "</div><div class='align-bottom'><div class='btn-group'>" +
-                            "<form action='order_details.html' method='get'>" +
-                            "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
-                            "<input type='hidden' value=''><br></form></div></div></div></div></div>";
-
+                        posts +=
+                        "</div><div class='align-bottom'><div class='btn-group'>" +
+                        "<form action='order_details.html' method='get'>" +
+                        "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
+                        "<input type='hidden' value=''><br></form></div></div></div></div></div>";
                     }
-                    // add all the rows to the table
                     $('#posts').append(posts);
                 }
-                else (!preorders || !preorders.length)
-                {
+                else if (!preorders || !preorders.length) {
                     showError('Preorders are empty or undefined.');
                 }
   
             }
-            catch (error)
-            {
+            catch (error) {
                 showError('There is a problem retrieving your preorders, please try again later.<br />'+error);
-           
             }
         });
     </script>
