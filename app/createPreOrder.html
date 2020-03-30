@@ -2,20 +2,20 @@
 
     <head>
 
-        <!-- Get user id in session when using the app -->
-        <script type="text/JavaScript">
-            const queryString = window.location.search;
-            console.log(queryString);
-            const urlParams = new URLSearchParams(queryString);
-            const latest_poid = urlParams.get('po_id')
-            console.log(latest_poid);
-        </script>
+
 
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <title>Creating a preorder</title>
+
+        <!-- Get user id in session when using the app -->
+        <script type="text/JavaScript">
+            if (typeof(Storage) !== "undefined") {
+                sessionStorage.traveller_id = 333;
+            }
+        </script>
 
         <link rel="stylesheet" href="">
         <!--[if lt IE 9]>
@@ -52,11 +52,11 @@
 
             <h1 class="h3 mb-3 font-weight-normal">Add a Pre Order</h1>
 
-            <form name="form-add-preorder" id="form-add-preorder">         
+            <form name="form-add-preorder" id="form-add-preorder" method="POST">         
                 
                 <div class="form-group">
                     <label for="inputName">Item Name</label>
-                    <input type="text" id="item_name" class="form-control" required>
+                    <input type="text" id="inputName" class="form-control" required>
                 </div>
 
                 <div class="form-group">
@@ -72,8 +72,7 @@
                         <div class="dropdown-content">
                           <p>Hello World!</p>
                         </div> -->
-
-                    <select id="item_category" name="Category" class="form-control" required> 
+                    <select id="inputCategory" name="Category" class="form-control" required> 
                         <option disabled selected value> -- Select an option -- </option>
                         <option value="Books">Books and Stationery</option>
                         <option value="Cosmetics">Cosmetics and Makeup</option>
@@ -93,7 +92,7 @@
                 <div class="form-group">
                     <label for="inputCountry">Country</label>
                     <!-- <input type="text" id="inputCountry" class="form-control" required> -->
-                    <select id="country" name="country" class="form-control" required> 
+                    <select id="inputCountry" name="country" class="form-control" required> 
                         <option disabled selected value> -- Select a country -- </option>
                         <option value="Afganistan">Afghanistan</option>
                         <option value="Albania">Albania</option>
@@ -346,195 +345,83 @@
 
                 <div class="form-group">
                     <label for="inputPrice">Price</label>
-                    <input type="text" id="price" class="form-control" required>
+                    <input type="text" id="inputPrice" class="form-control" required>
                 </div>
 
                 <div class="form-group">
                     <label for="inputDate">Deadline</label>
-                    <input type="date" id="end_date" class="form-control" required>
+                    <input type="date" id="inputDate" class="form-control" required>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="image">Image</label>
                     <input type="file"
                     id="image" name="image"
                     accept="image/png, image/jpeg"
                     class="form-control" required>
-                </div>
+                </div> -->
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
             </form>
 
             <a id="returnHome" class="btn btn-primary" href="traveller.html">Back to Home</a>
 
-            <script>
-                function showError(message) {
-                    // Hide the table and button in the event of error
-                    $('#main-container').hide();
-            
-                    // Display an error under the main container
-                    $('#errorBox').append("<h2>"+message+"</h2>");
-                }
-            
-                // anonymous async callback function 
-                $("#form-add-preorder").submit(async(event) => {
-                    //event.preventDefault();
-                    event.preventDefault();
+        </div>
+
+        <script>
+            function showError(message) {
+                $('#main-container').hide();
         
-                    // var serviceURL = "http://127.0.0.1:5000/preorders";
-                    var queryURL = "http://127.0.0.1:5000/preorders";
-                    var homeURL = "http://127.0.0.1/Travelling-Postman/app/traveller.html";
-    
-                    //var queryURL = "http://127.0.0.1:5000/preorders";
-                    var homeURL = "http://127.0.0.1/Travelling-Postman/app/traveller.html";
+                $('#main-container').append("<h2>"+message+"</h2>");
+            }
+        
+            // anonymous async callback function 
+            $("#form-add-preorder").submit(async(event) => {
+                event.preventDefault();
 
-                    
-                    // const response = await fetch(queryURL, { method: 'GET' });
-                    // const data = await response.json();
+                var serviceURL = "http://127.0.0.1:5000/preorder";
+                var homeURL = "http://127.0.0.1/Travelling-Postman/app/traveller.html";
 
-                    // Get form data & prepare data
-                    var po_id = latest_poid + 1;
-                    var traveller_id = Math.floor(Math.random() * 999) + 100;
-                    var item_name = $('#inputName').val();
-                    var item_category= $('#inputCategory').val();
-                    var country= $('#inputCountry').val();
-                    var price = parseFloat($('#inputPrice').val());
-                    var end_date = Date.parse($('#inputDate').val());
+                var traveller_id = Math.floor(Math.random() * 999) + 100;
+                // var traveller_id = sessionStorage.traveller_id;
+                var item_name = $('#inputName').val();
+                var item_category= $('#inputCategory').val();
+                var country= $('#inputCountry').val();
+                var price = parseFloat($('#inputPrice').val());
+                var end_date = $('#inputDate').val();
 
-                    try
-                    {
-                        // Retrieve latest preorder id
-                        const response = await fetch(queryURL, { method: 'GET' });
-                        // const response = await fetch(queryURL, 
-                        // { method: 'GET' }, 
-                        // {mode: 'no-cors'})
-                        // .then(function(response) {
-                        // console.log(response); 
-                        // }).catch(function(error) {  
-                        // console.log('Request failed', error)  
-                        // });
-                        const data = await response.json();
-
-                        // var response = await fetch(serviceURL, { method: 'GET' });
-                        // var data = await response.json();
-
-                        var preorders = data.preorders
-                        var last_preorder = preorders[preorders.length-1]["po_id"];
-                        console.log(last_preorder);
-
-                        // Get form data & prepare data
-                        var po_id = last_preorder + 1;
-                        // var po_id = getID();
-                        var traveller_id = Math.floor(Math.random() * 999) + 100;
-                        var item_name = $('#inputName').val();
-                        var item_category= $('#inputCategory').val();
-                        var country= $('#inputCountry').val();
-                        var price = parseFloat($('#inputPrice').val());
-                        var deadline = Date.parse($('#inputDate').val());
-
-                        // POST form data to preorder.py and wait for response
-                        var serviceURL = queryURL + "/" + po_id;
-                        console.log(serviceURL);
-                        console.log("YAASSSS");
-
-                        const respo = await fetch(serviceURL,
+                try
+                {
+                    const response = await fetch(serviceURL,
                                     {method: 'POST',
                                     headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ po_id: po_id, traveller_id: traveller_id, country: country, end_date: end_date, item_name: item_name, item_category: item_category, price: price })
-                                    });
-                                    
-                                    // {method: 'POST', 
-                                    // headers: { "Content-Type": "application/json" },
-                                    // body: JSON.stringify({ 
-                                    //     traveller_id: traveller_id, 
-                                    //     country: country, 
-                                    //     end_date: end_date, 
-                                    //     item_name: item_name, 
-                                    //     item_category: item_category, 
-                                    //     price: price })
-                                    // }, {mode: 'no-cors'})
-                                    // .then(function(response) {
-                                    // console.log(response); 
-                                    // }).catch(function(error) {  
-                                    // console.log('Request failed', error)  
-                                    // });
+                                    mode: 'cors',
+                                    body: JSON.stringify({  traveller_id: traveller_id,
+                                                            country: country,
+                                                            end_date: end_date,
+                                                            item_name: item_name,
+                                                            item_category: item_category,
+                                                            price: price })
+                                });
 
-                        console.log(respo);
-
-                        const dataPOST = await respo.json();
-            
-                        if (respo.ok) {
-                            window.location.replace(homeURL);
-                            return false;
-                        }
-                        else
-                        {
-                            console.error(error);
-                        }
-            
+                    var data = await response.json();
+                    
+                    if (response.ok) {
+                        window.location.replace(homeURL);
+                        return false;
                     }
-                    catch (error)
-                    {
-                        // Errors when calling the service; such as network error, 
-                        // service offline, etc
-                        showError
-                        ('There is a problem adding this preorder, please try again later.<br />'+error);
+                    else {
+                        console.log(data)
+                        showError(data.message);
                     }
-
-            ///////////////////
-            
-
-
-                    // try
-                    // {
-                    //     // Retrieve latest preorder id
-                    //     // const response = await fetch(queryURL, { method: 'GET' });
-                    //     // const data = await response.json();
-                    //     // var preorders = data.preorders
-                    //     // var last_preorder = preorders[preorders.length-1]["po_id"];
-
-
-
-                    //     // POST form data to preorder.py and wait for response
-                    //     var serviceURL = "http://127.0.0.1:5000/preorders/" + po_id.toString();
-                    //     console.log(serviceURL);
-
-                    //     var requestBody = {po_id: po_id, traveller_id: traveller_id, country: country, end_date: end_date, item_name: item_name, item_category: item_category, price: price};
-
-                    //     async function postData(serviceURL, requestBody)
-
-                    //     var reqParam = 
-                    //     {
-                    //         headers: {"Content-Type":"application/json"},
-                    //         mode: 'no-cors',
-                    //         method: 'POST',
-                    //         body: JSON.stringify(requestBody)
-                    //     }
-
-                    //     console.log(reqParam.body);
-
-                    //     try
-                    //     {
-                    //         const response = await fetch(serviceURL, reqParam);
-                    //         data = await response.json();
-
-                    //         if (response.ok)
-                    //         {
-                    //             console.log(data);
-                    //             window.location.replace(homeURL)
-                    //         }
-                    //     }
-                    //     catch (error) {
-                    //         console.error(error);
-                    //     }
-                    // }
-                    // }
-                    // catch (error) {
-                    //     console.error(error);
-                    // }
-
-                });
-            </script>
-        </div>
+        
+                }
+                catch (error) {
+                    showError
+                    ('There is a problem adding this preorder, please try again later.<br />'+error);
+                }
+            });
+        </script>
+        
     </body>
 </html>
