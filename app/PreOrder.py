@@ -61,50 +61,25 @@ def get_all():
 @app.route("/preorder", methods=['POST'])
 def create_preorder():
 
-    print(request)
+    preorder = request.get_json()
 
-    if request.is_json:
-        print("req is json")
-        preorder = request.get_json()
-        print(preorder)
-    else:
-        print("req not json")
-        print(type(request.get_json()))
-        return jsonify(status="Request was not JSON")
-    
-    traveller_id=str(preorder['traveller_id'])
-    item_name = preorder['item_name']
-    item_category = preorder['item_category']
-    country = preorder['country']
-    price = preorder['price']
-    print(type(preorder['end_date']))
-    # end_date = datetime.strptime(preorder['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-    # end_date = preorder['end_date']
-    
-    print("done binding data")
-
-    new_po = PreOrder(traveller_id=traveller_id,
-                    country=country,
+    new_po = PreOrder(traveller_id=str(preorder['traveller_id']),
+                    country=country = preorder['country'],
                     end_date=preorder['end_date'],
-                    item_name=item_name,
-                    item_category=item_category,
-                    price=price)
-    print("done creating instance/obj")
+                    item_name=preorder['item_name'],
+                    item_category=item_category = preorder['item_category'],
+                    price=price = preorder['price'])
 
     try:
         db.session.add(new_po)
         db.session.commit()
-        print("done sending to db")
     except:
-        print("sending to db failed")
         return jsonify({"message": "An error occurred while creating the preorder."}), 500
- 
-    print("returning request to creat.html")
+
     return jsonify(preorder), 201
 
-
 # GET all preorder based on traveller id
-@app.route("/preorders/<string:traveller_id>")
+@app.route("/preorders/trav/<string:traveller_id>")
 def get_all_by_traveller(traveller_id):
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.filter_by(traveller_id=traveller_id).all()]})
 
@@ -116,7 +91,11 @@ def getRegisteredUsers():
 
 @app.route("/preorders/<string:po_id>")
 def find_by_poid(po_id):
-    pass
+    # pass
+    preorder = PreOrder.query.filter_by(po_id=po_id).first()
+    if preorder:
+        return jsonify(preorder.json())
+    return jsonify({'message': 'Pre-Order not found'}), 404
 
 if __name__=='__main__':
     app.run(port=5000, debug=True)

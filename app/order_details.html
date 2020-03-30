@@ -116,9 +116,12 @@
         // - using await requires the function that calls it to be async
         $(async() => {           
             // Change serviceURL to your own
-            var po_id = 1;
+            var url = document.URL;
+            var sub = url.substring(url.lastIndexOf('?') + 1);
+            var quantity = sub.substring(sub.indexOf('=')+ 1, sub.indexOf('&'));
+            var po_id = sub.substring(sub.lastIndexOf('=') + 1);
+
             var serviceURL = "http://127.0.0.1:5000/preorders" + "/" + po_id;
-    
             try {
                 const response =
                   await fetch(
@@ -131,47 +134,18 @@
                   console.log("perfecto!!!")
                   var item_name = order.item_name;
                   var price = order.price;
-                  var quantity = 2; // need to retrieve from form later
                   var total = price * quantity
-                  // var quantity = order.
-                  // var item_name = "testing";
-                  // var price = 123;
-  
-                  // document.getElementById('item_name').innerHTML = item_name;
-                  // document.getElementsByClassName('price').innerHTML = price;
-                  
+
                   $("#price").text(price);
                   $("#item_name").text(item_name);
                   $("#quantity").text(quantity);
                   $("#total").text(total);
-                  // document.getElementById("price").innerHTML = price;
-                  // document.getElementById("item_name").innerHTML = item_name;
-                  // document.getElementById("quantity").innerHTML = quantity;
-                  // document.getElementById("total").innerHTML = total;
-  
+
                   //for the passing of data: 
                   var traveller_id = order.traveller_id;
                   var country = order.country;
                   var end_date = order.end_date;
                   var item_category = order.item_category;
-                  
-                  // var strtotal = total.toString();
-                  // console.log(total);
-                  // console.log(strtotal);
-                  // console.log("---------------------");
-                  // console.log(traveller_id);
-                  // console.log(country);
-                  // console.log(end_date);
-                  // console.log(item_name);
-                  // console.log(item_category);
-                  console.log('HAPPENING???');
-                  console.log('sike');
-                  console.log('YAS MOOLAH IS COMING')
-                  // console.log(total);
-                  // console.log(price);
-                  // console.log(quantity);
-                  // amt = document.getElementById('total').textContent;
-                  // console.log(amt);
   
                   // PAYPAL API //
                   paypal.Buttons({
