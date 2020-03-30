@@ -60,7 +60,6 @@ def get_all():
 # POST preorder to database
 @app.route("/preorders/<string:po_id>", methods=['POST'])
 def create_preorder(po_id):
-    
     data = request.get_json()
     preorder_details = PreOrder(po_id, **data)
  
@@ -73,7 +72,7 @@ def create_preorder(po_id):
     return jsonify(preorder_details.json()), 201
 
 # GET all preorder based on traveller id
-@app.route("/preorders/<string:traveller_id>")
+@app.route("/preorders/trav/<string:traveller_id>")
 def get_all_by_traveller(traveller_id):
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.filter_by(traveller_id=traveller_id).all()]})
 
@@ -85,7 +84,11 @@ def getRegisteredUsers():
 
 @app.route("/preorders/<string:po_id>")
 def find_by_poid(po_id):
-    pass
+    # pass
+    preorder = PreOrder.query.filter_by(po_id=po_id).first()
+    if preorder:
+        return jsonify(preorder.json())
+    return jsonify({'message': 'Pre-Order not found'}), 404
 
 if __name__=='__main__':
     app.run(port=5000, debug=True)
