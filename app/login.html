@@ -84,12 +84,60 @@
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/me', function (response) {
                 console.log(response);
-                console.log('Successful login for: ' + response.name);
+                const name = response.name;
+                // Store
+                sessionStorage.setItem("name", name);
+
+                
+                console.log('Successful login for: ' + name);
 
             });
             FB.login(function (response) {
                 if (response.authResponse) {
-                    window.top.location = "./requester.html";
+                    // Retrieve
+                    // document.getElementById("name").innerHTML = localStorage.getItem("lastname");
+                
+                    console.log(response);
+                    $(async (event) => { 
+                    var user_id = response.authResponse.userID;
+                    sessionStorage.setItem("user_id", user_id);
+                    console.log('Successful login for: ' + sessionStorage.getItem("name"));
+
+
+                    serviceURL = 'http://127.0.0.1:5002/users/' + user_id;
+                    console.log(serviceURL);
+
+                    try {
+                        const response =
+                            await fetch(serviceURL, {
+                                method: 'POST',
+                                mode: 'cors',
+                                headers: { "Content-Type": "application/json"},
+                                body: JSON.stringify({
+                                    name: sessionStorage.getItem("name"),
+                                })
+                            });
+                
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        window.top.location = "./requester.html";
+
+                    }
+
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    });
+
+
+
+
+                    // console.log(user_id);
+                    // // Store
+                    // localStorage.setItem("user_id", user_id);
+                    // // window.top.location = "./requester.html";
+                    // console.log(response.authResponse);
                 }
 
             });
