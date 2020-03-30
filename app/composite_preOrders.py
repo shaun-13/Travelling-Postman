@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 import pika
 import json
@@ -8,9 +8,24 @@ app = Flask(__name__)
 CORS(app)
 
 
+@app.route("/passToPayment")
+def passToPayment():
+    return request.args.get('payment')
 
 
-
+    # for key in order:
+    #     print(key, order[key])
+    
+    # print(po_id)
+    # serviceURL = 'order_details.html?po_id='
+    
+    # return redirect(serviceURL + po_id)
+    # r = request.get(url = serviceURL, param = po_id)
+    # if 201 in r:
+    #     print('Passed order:', po_id, 'to Payment Microservice successfully!')
+    # else:
+    #     print('Something is wrong!!!!')
+    
 
 
 def process_payment(order):
@@ -74,4 +89,4 @@ def receive_order():
 
 
 if __name__=='__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5001, debug=True)
