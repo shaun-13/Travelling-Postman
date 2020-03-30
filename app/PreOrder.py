@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from datetime import *
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -24,8 +25,7 @@ class PreOrder(db.Model):
     # img_name = db.Column(db.String(300))
     # img_data =  db.Column(db.LargeBinary)
  
-    def __init__(self, po_id, traveller_id, country, end_date, item_name, item_category, price):
-        self.po_id = po_id
+    def __init__(self, traveller_id, country, end_date, item_name, item_category, price):
         self.traveller_id = traveller_id
         self.country = country
         self.end_date = end_date
@@ -58,22 +58,28 @@ def get_all():
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.all()]})
 
 # POST preorder to database
-@app.route("/preorders/<string:po_id>", methods=['POST'])
-def create_preorder(po_id):
-    
-    data = request.get_json()
-    preorder_details = PreOrder(po_id, **data)
- 
+@app.route("/preorder", methods=['POST'])
+def create_preorder():
+
+    preorder = request.get_json()
+
+    new_po = PreOrder(traveller_id=str(preorder['traveller_id']),
+                    country=country = preorder['country'],
+                    end_date=preorder['end_date'],
+                    item_name=preorder['item_name'],
+                    item_category=item_category = preorder['item_category'],
+                    price=price = preorder['price'])
+
     try:
-        db.session.add(preorder_details)
+        db.session.add(new_po)
         db.session.commit()
     except:
         return jsonify({"message": "An error occurred while creating the preorder."}), 500
- 
-    return jsonify(preorder_details.json()), 201
+
+    return jsonify(preorder), 201
 
 # GET all preorder based on traveller id
-@app.route("/preorders/<string:traveller_id>")
+@app.route("/preorders/trav/<string:traveller_id>")
 def get_all_by_traveller(traveller_id):
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.filter_by(traveller_id=traveller_id).all()]})
 
@@ -85,7 +91,11 @@ def getRegisteredUsers():
 
 @app.route("/preorders/<string:po_id>")
 def find_by_poid(po_id):
-    pass
+    # pass
+    preorder = PreOrder.query.filter_by(po_id=po_id).first()
+    if preorder:
+        return jsonify(preorder.json())
+    return jsonify({'message': 'Pre-Order not found'}), 404
 
 if __name__=='__main__':
     app.run(port=5000, debug=True)
