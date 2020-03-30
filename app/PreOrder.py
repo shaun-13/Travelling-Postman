@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from datetime import *
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -24,8 +25,7 @@ class PreOrder(db.Model):
     # img_name = db.Column(db.String(300))
     # img_data =  db.Column(db.LargeBinary)
  
-    def __init__(self, po_id, traveller_id, country, end_date, item_name, item_category, price):
-        self.po_id = po_id
+    def __init__(self, traveller_id, country, end_date, item_name, item_category, price):
         self.traveller_id = traveller_id
         self.country = country
         self.end_date = end_date
@@ -58,19 +58,50 @@ def get_all():
     return jsonify({"preorders": [preorder_details.json() for preorder_details in PreOrder.query.all()]})
 
 # POST preorder to database
-@app.route("/preorders/<string:po_id>", methods=['POST'])
-def create_preorder(po_id):
+@app.route("/preorder", methods=['POST'])
+def create_preorder():
+
+    print(request)
+
+    if request.is_json:
+        print("req is json")
+        preorder = request.get_json()
+        print(preorder)
+    else:
+        print("req not json")
+        print(type(request.get_json()))
+        return jsonify(status="Request was not JSON")
     
-    data = request.get_json()
-    preorder_details = PreOrder(po_id, **data)
- 
+    traveller_id=str(preorder['traveller_id'])
+    item_name = preorder['item_name']
+    item_category = preorder['item_category']
+    country = preorder['country']
+    price = preorder['price']
+    print(type(preorder['end_date']))
+    # end_date = datetime.strptime(preorder['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    # end_date = preorder['end_date']
+    
+    print("done binding data")
+
+    new_po = PreOrder(traveller_id=traveller_id,
+                    country=country,
+                    end_date=preorder['end_date'],
+                    item_name=item_name,
+                    item_category=item_category,
+                    price=price)
+    print("done creating instance/obj")
+
     try:
-        db.session.add(preorder_details)
+        db.session.add(new_po)
         db.session.commit()
+        print("done sending to db")
     except:
+        print("sending to db failed")
         return jsonify({"message": "An error occurred while creating the preorder."}), 500
  
-    return jsonify(preorder_details.json()), 201
+    print("returning request to creat.html")
+    return jsonify(preorder), 201
+
 
 # GET all preorder based on traveller id
 @app.route("/preorders/<string:traveller_id>")
