@@ -70,7 +70,7 @@ def process_payment(order):
     channel = connection.channel()
 
     # set up the exchange if the exchange doesn't exist
-    exchangename="order_direct"
+    exchangename="order_topic"
     channel.exchange_declare(exchange=exchangename, exchange_type='topic')
 
     # prepare the message body content
@@ -79,7 +79,7 @@ def process_payment(order):
     # send the message to confirmed_orders
     channel.queue_declare(queue='confirmed_orders', durable=True) # make sure the queue used by the confirmed_orders exist and durable
     channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.success') # make sure the queue is bound to the exchange
-    channel.basic_publish(exchange=exchangename, routing_key="orders.add", body=message)
+    channel.basic_publish(exchange=exchangename, routing_key="orders.success", body=message)
     
 
 @app.route("/paymentConfirmed/", methods=['POST'])
@@ -89,30 +89,31 @@ def receive_order():
     # for key in order:
     #     print(key, order[key])
 
-    quantity = request.form['quantity']
-    po_id = request.form['poid']
-    item_name = request.form['item_name']
-    requester_id = request.form['requester']
-    price = request.form['price']
+    # quantity = request.form['quantity']
+    # po_id = request.form['poid']
+    # item_name = request.form['item_name']
+    # requester_id = request.form['requester']
+    # price = request.form['price']
 
-    PARAMS = jsonify({
-        'quantity':quantity,
-        'po_id': po_id,
-        'item_name': item_name,
-        'requester_id':requester_id,
-        'price':price
-        })
+    # PARAMS = jsonify({
+    #     'quantity':quantity,
+    #     'po_id': po_id,
+    #     'item_name': item_name,
+    #     'requester_id':requester_id,
+    #     'price':price
+    #     })
 
+    # print(PARAMS)
 
-    redirectURL = url_for('redirectToPayment', quantity=quantity, po_id=po_id, item_name=item_name, requester_id=requester_id, price=price) 
+    # redirectURL = url_for('redirectToPayment', quantity=quantity, po_id=po_id, item_name=item_name, requester_id=requester_id, price=price) 
 
-    redirectURL = redirectURL[1:]
+    # redirectURL = redirectURL[1:]
     
-    serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
+    # serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
     
-    r = redirect(serviceURL)
+    # r = redirect(serviceURL)
    
-    print('Sent to sucessful_payment.html')
+    # print('Sent to sucessful_payment.html')
 
 
 
