@@ -62,7 +62,7 @@ margin-bottom: .25rem;
  
  .quantity .input-text.qty {
   width: 35px;
-  height: 39px;
+  height: 40px;
   padding: 0 5px;
   text-align: center;
   background-color: transparent;
@@ -85,7 +85,7 @@ margin-bottom: .25rem;
  .quantity.buttons_added .minus,
  .quantity.buttons_added .plus {
   padding: 7px 10px 8px;
-  height: 41px;
+  height: 40px;
   background-color: #ffffff;
   border: 1px solid #efefef;
   cursor:pointer;}
