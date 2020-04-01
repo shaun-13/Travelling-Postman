@@ -64,7 +64,7 @@ def create_preorder():
     preorder = request.get_json()
 
     new_po = PreOrder(traveller_id=str(preorder['traveller_id']),
-                    country=country = preorder['country'],
+                    country=preorder['country'],
                     end_date=preorder['end_date'],
                     item_name=preorder['item_name'],
                     item_category=item_category = preorder['item_category'],
