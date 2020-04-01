@@ -76,8 +76,8 @@ def processOrderLog(order):
     print("Current Time =", current_time)
 
 
-    po_id = order['poid']
-    requester_id = order['requesterID']
+    po_id = order['po_id']
+    requester_id = order['requester_id']
     quantity = order['quantity']
 
     order = Confirmed_order(po_id= po_id, requester_id= requester_id, quantity= quantity)
