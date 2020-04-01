@@ -86,13 +86,15 @@ def process_payment(order):
 def receive_order():
     status = 201
     order = request.json
+    print(type(order))
+    print(order)
     # for key in order:
     #     print(key, order[key])
 
     quantity = order['quantity']
-    po_id = order['poid']
+    po_id = order['po_id']
     item_name = order['item_name']
-    requester_id = order['requester']
+    requester_id = order['requester_id']
     price = order['price']
 
     PARAMS = jsonify({
@@ -112,6 +114,8 @@ def receive_order():
     serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
     
     r = redirect(serviceURL)
+    print(serviceURL)
+    print(r)
    
     print('Sent to sucessful_payment.html')
 
