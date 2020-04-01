@@ -37,27 +37,40 @@ def OrderCreation():
     channel = connection.channel()
     exchangename="order_topic"
     channel.exchange_declare(exchange=exchangename, exchange_type='topic')
-    channelqueue = channel.queue_declare(queue='confirmed_orders', durable=True) 
+    channelqueue = channel.queue_declare(queue='', exclusive=True) 
+   
     queue_name = channelqueue.method.queue
-    channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='orders.*') 
+    channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='orders.*') # bind the queue to the exchange via the key
+
+    # set up a consumer and start to wait for coming messages
     channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
-    channel.start_consuming() 
+    channel.start_consuming() # an implicit loop waiting to receive messages; it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
+
+
+    # queue_name = channelqueue.method.queue
+    # channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='#') 
+    # channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+    # channel.start_consuming() 
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
-    # print("Received an order log by " + __file__)
+    print("Received an order log by " + __file__)
     processOrderLog(json.loads(body))
     # print() # print a new line feed
 
 def processOrderLog(order):
     # userid = order['requester_id']
+
+    print('######## I AM ALIVE!!!!!! ####################')
+    print(order)
+
     bot_token = '1076658459:AAHwvu83zFLd803XwCa6yBip6j0vwA1Ax5s'
-    chatid = '410414385'
+    chatid = '223450427' #223450427 -shaun 410414385-wushen
     bot_message = "You have successfully registered for your preorder."
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chatid + '&parse_mode=Markdown&text=' + bot_message
     print(send_text)
     response = requests.get(send_text)
     print(response)
-    return response.json()
+    return response #jsonify(response.json()), 200
 
 @app.route('/<string:userid>/<string:teleid>')
 def insert_chatid(userid, teleid):
@@ -109,5 +122,5 @@ def insert_chatid(userid, teleid):
 
 
 if __name__=='__main__':
-    app.run(port=5005, debug=True)
+    app.run(host="127.0.0.1", port=5005, debug=True)
     OrderCreation()
