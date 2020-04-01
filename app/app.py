@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
 import requests
 import json
+import pika
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/notifications'
@@ -26,6 +28,31 @@ class Person(db.Model):
 
     def json(self):
         return {"userid": self.userid, "teleuserid": self.teleuserid, "telechatid": self.telechatid}
+
+def OrderCreation():
+    print('ITS RUNNING?')
+    hostname = "localhost" # default host
+    port = 5672 # default port
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
+    exchangename="order_topic"
+    channel.exchange_declare(exchange=exchangename, exchange_type='topic')
+    channelqueue = channel.queue_declare(queue='confirmed_orders', durable=True) 
+    queue_name = channelqueue.method.queue
+    channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='orders.*') 
+    channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+    channel.start_consuming() 
+
+def callback(channel, method, properties, body): # required signature for the callback; no return
+    print("Received a notification order by " + __file__)
+    processmessage(json.loads(body))
+    print() # print a new line feed
+
+def processmessage(order):
+    userid = order['requesterID']
+    print('HELP')
+    return redirect(url_for('send_message'), userid=userid)
+
 
 @app.route('/<string:userid>/<string:teleid>')
 def insert_chatid(userid, teleid):
