@@ -374,13 +374,12 @@
         
                 $('#main-container').append("<h2>"+message+"</h2>");
             }
-        
-            // anonymous async callback function 
+
             $("#form-add-preorder").submit(async(event) => {
                 event.preventDefault();
 
                 var serviceURL = "http://127.0.0.1:5000/preorder";
-                var homeURL = "http://127.0.0.1/Travelling-Postman/app/traveller.html";
+                var homeURL = "traveller.html";
 
                 var traveller_id = Math.floor(Math.random() * 999) + 100;
                 // var traveller_id = sessionStorage.traveller_id;
