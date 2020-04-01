@@ -35,11 +35,13 @@ def passToPayment():
     
     serviceURL = 'http://localhost/ESD/app/order_details.html' + redirectURL
     
+    print(serviceURL)
     r = redirect(serviceURL)
+    print(r)
    
     print('Sent to order_details.html')
 
-    return PARAMS, 201
+    return r
 
 
 
