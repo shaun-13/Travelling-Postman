@@ -115,115 +115,100 @@
         // anonymous async function 
         // - using await requires the function that calls it to be async
         $(async() => {           
-            // Change serviceURL to your own
-            // var url = document.URL;
-            // var sub = url.substring(url.lastIndexOf('?') + 1);
-            // var quantity = sub.substring(sub.indexOf('=')+ 1, sub.indexOf('&'));
-            // var po_id = sub.substring(sub.lastIndexOf('=') + 1);
+            var quantity= getQueryVariable("quantity");
+            var po_id= getQueryVariable("po_id");
+            var item_name= getQueryVariable("item_name");
+            var requester_id= getQueryVariable("requester_id");
+            var price= getQueryVariable("price");
 
-            // fetch data from composite ms
-            var serviceURL = "http://127.0.0.1:5000/preorders" + "/" + po_id;
-            try {
-                const response =
-                  await fetch(
-                    serviceURL, { method: 'GET' }
-                );
-                const data = await response.json();
-                var order = data; 
-  
-                if(response.ok){
-                  console.log("perfecto!!!")
-                  var item_name = order.item_name;
-                  var price = order.price;
-                  var total = price * quantity
+            function getQueryVariable(variable) {
+              var query = window.location.search.substring(1);
+              var vars = query.split("&");
+              for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                  return pair[1];
+                }
+              }
+              alert('Query Variable ' + variable + ' not found');
+            }
+            console.log("quantity = " + quantity); 
+            console.log("po_id = " + po_id);
+            console.log("item_name = " + item_name);
+            console.log("requester_id = " + requester_id);
+            console.log("price = " + price);
 
-                  $("#price").text(price);
-                  $("#item_name").text(item_name);
-                  $("#quantity").text(quantity);
-                  $("#total").text(total);
+            var total = price * quantity;
 
-                  //for the passing of data: 
-                  var traveller_id = order.traveller_id;
-                  var country = order.country;
-                  var end_date = order.end_date;
-                  var item_category = order.item_category;
-  
-                  // PAYPAL API //
-                  paypal.Buttons({
-                    createOrder: function(data, actions) {
-                      // This function sets up the details of the transaction, including the amount and line item details.
-                      return actions.order.create({
-                        purchase_units: [{
-                          amount: {
-                            value: total
-                          }
-                        }]
-                      });
-                    },
-                    onApprove: function(data, actions) {
-                      // This function captures the funds from the transaction.
-                      return actions.order.capture().then(function(details) {
-                        // This function shows a transaction success message to your buyer.
-                        alert('Transaction completed by ' + details.payer.name.given_name);
-  
-                        // call composite function to add requestor to orders
-                        // post order details to confirmed orders
-  
-                        $(async (event) => {
-                        //Prevents screen from refreshing when submitting
-                        event.preventDefault();
-                        var cfmorderURL = "http://127.0.0.1:5001/paymentConfirmed/";
-                        var homeURL = "http://127.0.0.1/Travelling-Postman/app/requester.html";
-  
-                        //var requester_id = sessionStorage.getItem('user_id');
-                        try {
-                            const response =
-                                await fetch(
-                                    cfmorderURL, {
-                                    method: 'POST',
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ 
-                                      po_id: po_id,
-                                      requester_id: requester_id,
-                                      quantity: quantity
-                                    })
-                                });
-                            const data = await response.json();
-  
-                            if (response.ok) {
-                                // relocate to home page
-                                console.log("weewoo yoohoo!!!");
-                                window.location.replace(homeURL);
-                                return false;
-                            } else {
-                                console.log(data);
-                                showError(data.message);
-                            }
-                        } catch (error) {
-                            // Errors when calling the service; such as network error, 
-                            // service offline, etc
-                            showError
-                                ("There is a problem confirming payment, please try again later. " + error);
-  
-                        } // error
-                        });
-                      });
+            $("#price").text(price);
+            $("#item_name").text(item_name);
+            $("#quantity").text(quantity);
+            $("#total").text(total);
+
+            // PAYPAL API //
+            paypal.Buttons({
+              createOrder: function(data, actions) {
+                // This function sets up the details of the transaction, including the amount and line item details.
+                return actions.order.create({
+                  purchase_units: [{
+                    amount: {
+                      value: total
                     }
-                  }).render('#paypal-button-container');
-                  //This function displays Smart Payment Buttons on your web page.
-  
-                }
-                else{
-                  showError("Pre-Order does not exist. It might have ended, or been deleted. Please refresh.")
-                }
-            } 
-            catch (error) {
-                // Errors when calling the service; such as network error, 
-                // service offline, etc
-                showError
-                ('There is a problem retrieving your order data, please try again later.<br />'+error);
-                
-              } // error
+                  }]
+                });
+              },
+              onApprove: function(data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function(details) {
+                  // This function shows a transaction success message to your buyer.
+                  alert('Transaction completed by ' + details.payer.name.given_name);
+
+                  // call composite function to add requestor to orders
+                  // post order details to confirmed orders
+
+                  $(async (event) => {
+                  //Prevents screen from refreshing when submitting
+                  event.preventDefault();
+                  var cfmorderURL = "http://127.0.0.1:5001/paymentConfirmed/";
+                  var homeURL = "./requester.html";
+
+                  //var requester_id = sessionStorage.getItem('user_id');
+                  try {
+                      const response =
+                          await fetch(
+                              cfmorderURL, {
+                              method: 'POST',
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ 
+                                po_id: po_id,
+                                requester_id: requester_id,
+                                quantity: quantity,
+                                total : total
+                              })
+                          });
+                      const data = await response.json();
+
+                      if (response.ok) {
+                          // relocate to home page
+                          console.log("weewoo yoohoo!!!");
+                          window.location.replace(homeURL);
+                          return false;
+                      } else {
+                          console.log(data);
+                          showError(data.message);
+                      }
+                  } catch (error) {
+                      // Errors when calling the service; such as network error, 
+                      // service offline, etc
+                      showError
+                          ("There is a problem confirming payment, please try again later. " + error);
+
+                  } // error
+                  });
+                });
+              }
+            }).render('#paypal-button-container');
+            //This function displays Smart Payment Buttons on your web page.
           });
       </script>
     </div>
