@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, redirect
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS
 import pika
 import json
@@ -7,10 +7,41 @@ app = Flask(__name__)
 
 CORS(app)
 
+@app.route('/')
+def redirectToPayment():
+    return
 
 @app.route("/passToPayment")
 def passToPayment():
-    return request.args.get('payment')
+
+    quantity = request.args.get('quantity')
+    po_id = request.args.get('poid')
+    item_name = request.args.get('item_name')
+    requester_id = request.args.get('requester')
+    price = request.args.get('price')
+
+    PARAMS = jsonify({
+        'quantity':quantity,
+        'po_id': po_id,
+        'item_name': item_name,
+        'requester_id':requester_id,
+        'price':price
+        })
+
+
+    redirectURL = url_for('redirectToPayment', quantity=quantity, po_id=po_id, item_name=item_name, requester_id=requester_id, price=price) 
+
+    redirectURL = redirectURL[1:]
+    
+    serviceURL = 'http://localhost/ESD/app/order_details.html' + redirectURL
+    
+    r = redirect(serviceURL)
+   
+    print('Sent to order_details.html')
+
+    return PARAMS, 201
+
+
 
 
     # for key in order:
@@ -40,14 +71,14 @@ def process_payment(order):
 
     # set up the exchange if the exchange doesn't exist
     exchangename="order_direct"
-    channel.exchange_declare(exchange=exchangename, exchange_type='direct')
+    channel.exchange_declare(exchange=exchangename, exchange_type='topic')
 
     # prepare the message body content
     message = json.dumps(order, default=str) # convert a JSON object to a string
 
     # send the message to confirmed_orders
     channel.queue_declare(queue='confirmed_orders', durable=True) # make sure the queue used by the confirmed_orders exist and durable
-    channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.add') # make sure the queue is bound to the exchange
+    channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.success') # make sure the queue is bound to the exchange
     channel.basic_publish(exchange=exchangename, routing_key="orders.add", body=message)
     
 
@@ -55,8 +86,36 @@ def process_payment(order):
 def receive_order():
     status = 201
     order = request.json
-    for key in order:
-        print(key, order[key])
+    # for key in order:
+    #     print(key, order[key])
+
+    quantity = request.form['quantity']
+    po_id = request.form['poid']
+    item_name = request.form['item_name']
+    requester_id = request.form['requester']
+    price = request.form['price']
+
+    PARAMS = jsonify({
+        'quantity':quantity,
+        'po_id': po_id,
+        'item_name': item_name,
+        'requester_id':requester_id,
+        'price':price
+        })
+
+
+    redirectURL = url_for('redirectToPayment', quantity=quantity, po_id=po_id, item_name=item_name, requester_id=requester_id, price=price) 
+
+    redirectURL = redirectURL[1:]
+    
+    serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
+    
+    r = redirect(serviceURL)
+   
+    print('Sent to sucessful_payment.html')
+
+
+
     process_payment(order)
     return jsonify(order), status
 
