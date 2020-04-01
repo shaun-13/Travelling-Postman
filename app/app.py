@@ -10,6 +10,7 @@ import pika
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/notifications'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
  
 db = SQLAlchemy(app)
 CORS(app)
@@ -30,7 +31,6 @@ class Person(db.Model):
         return {"userid": self.userid, "teleuserid": self.teleuserid, "telechatid": self.telechatid}
 
 def OrderCreation():
-    print('ITS RUNNING?')
     hostname = "localhost" # default host
     port = 5672 # default port
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
@@ -44,15 +44,20 @@ def OrderCreation():
     channel.start_consuming() 
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
-    print("Received a notification order by " + __file__)
-    processmessage(json.loads(body))
-    print() # print a new line feed
+    # print("Received an order log by " + __file__)
+    processOrderLog(json.loads(body))
+    # print() # print a new line feed
 
-def processmessage(order):
-    userid = order['requesterID']
-    print('HELP')
-    return redirect(url_for('send_message'), userid=userid)
-
+def processOrderLog(order):
+    # userid = order['requester_id']
+    bot_token = '1076658459:AAHwvu83zFLd803XwCa6yBip6j0vwA1Ax5s'
+    chatid = '410414385'
+    bot_message = "You have successfully registered for your preorder."
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chatid + '&parse_mode=Markdown&text=' + bot_message
+    print(send_text)
+    response = requests.get(send_text)
+    print(response)
+    return response.json()
 
 @app.route('/<string:userid>/<string:teleid>')
 def insert_chatid(userid, teleid):
@@ -91,17 +96,18 @@ def insert_chatid(userid, teleid):
     return jsonify(tele_details.json()), 201
 
 
-@app.route('/<string:userid>')
-def send_message(userid):
-    bot_token = '1076658459:AAHwvu83zFLd803XwCa6yBip6j0vwA1Ax5s'
-    cuser = Person.query.filter_by(userid=userid).first()
-    chatid = str(cuser.telechatid)
-    
-    # get chatid from database
-    bot_message = "You have successfully registered for your preorder."
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chatid + '&parse_mode=Markdown&text=' + bot_message
-    response = requests.get(send_text)
-    return response.json()
+# @app.route('/<string:userid>')
+# def send_message(userid):
+#     bot_token = '1076658459:AAHwvu83zFLd803XwCa6yBip6j0vwA1Ax5s'
+#     cuser = Person.query.filter_by(userid=userid).first()
+#     # chatid = '410414385'
+#     chatid = str(cuser.telechatid)
+#     bot_message = "You have successfully registered for your preorder."
+#     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chatid + '&parse_mode=Markdown&text=' + bot_message
+#     response = requests.get(send_text)
+#     return response.json()
+
 
 if __name__=='__main__':
     app.run(port=5005, debug=True)
+    OrderCreation()
