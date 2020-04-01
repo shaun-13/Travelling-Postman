@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Requester Home</title>
+
+    
+    <!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+    <!-- Bootstrap libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <!-- <link rel="stylesheet" href="requester-album.css"> -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <script src="qtyscript.js"></script>
+      <!-- Bootstrap libraries -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+
+  <!-- Latest compiled and minified JavaScript -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="requester.html" class="navbar-brand d-flex align-items-center">
+                    <img class='mr-2' src='courier-delivery.png' alt='Logo' width="32" height="32">
+                    <strong>Requester Dashboard</strong>
+                </a>
+                <div>
+                    <a href="traveller.html" class="btn btn-primary">Switch to Traveller Mode</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+
+        <section class="jumbotron text-center" id='jumbo'>
+            
+            <div class="container box">
+                <h1>Thank you for your order!</h1>
+                <p class="lead text-muted">Your order has been received.</p>
+                
+           
+            </div>
+        </section>
+
+        <div class="album py-5 bg-light">
+            <div class="container">
+                
+                <h1 class="h3 mb-3 font-weight-normal">Order Details</h1><br>
+                <ul class="list-group mb-3">
+                
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">
+                            <p>Item:</p>
+                            </h6>
+                            <!-- <small class="text-muted">Brief description</small> -->
+                        </div>
+                        <span class="text-muted">
+                            <p id="receipt_item"></p>
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">
+                            <p>Quantity:</p>
+                            </h6>
+                            <!-- <small class="text-muted">Brief description</small> -->
+                        </div>
+                        <span class="text-muted">
+                            <p id="receipt_quantity"></p>
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">
+                            <p>Paid:</p>
+                            </h6>
+                            <!-- <small class="text-muted">Brief description</small> -->
+                        </div>
+                        <span class="text-muted">
+                            <p id="receipt_total"></p>
+                        </span>
+                    </li>
+                
+                <script>
+                    $(async() => {
+
+                        var quantity= getQueryVariable("quantity");
+                        var po_id= getQueryVariable("po_id");
+                        var item_name= getQueryVariable("item_name");
+                        // var requester_id= getQueryVariable("requester_id");
+                        var price= getQueryVariable("price");
+
+                        function getQueryVariable(variable) {
+                            var query = window.location.search.substring(1);
+                            var vars = query.split("&");
+                            for (var i=0;i<vars.length;i++) {
+                                var pair = vars[i].split("=");
+                                if (pair[0] == variable) {
+                                return pair[1];
+                                }
+                        }
+                        alert('Query Variable ' + variable + ' not found');
+                        }
+                        console.log("quantity =" + quantity); 
+                        console.log("po_id = " + po_id);
+                        console.log("item_name = " + item_name);
+                        // console.log("requester_id = " + requester_id);
+                        console.log("price = " + price);
+
+                        var total = price * quantity;
+
+                        $("#receipt_item").text(item_name);
+                        $("#receipt_quantity").text(quantity);
+                        $("#receipt_total").text(total);
+                                    }
+                    )
+                </script>
+                <p>
+                    <a href="#" class="btn btn-primary my-2">Check your Pre-Orders</a>
+                </p>
+            </div>
+        </div>
+
+    </main>
+    
+    
+    <footer class="text-muted">
+        <div class="container">
+            <p class="float-right">
+                <a href="#">Back to top</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
