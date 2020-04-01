@@ -67,8 +67,8 @@ def create_preorder():
                     country=preorder['country'],
                     end_date=preorder['end_date'],
                     item_name=preorder['item_name'],
-                    item_category=item_category = preorder['item_category'],
-                    price=price = preorder['price'])
+                    item_category=preorder['item_category'],
+                    price=preorder['price'])
 
     try:
         db.session.add(new_po)
