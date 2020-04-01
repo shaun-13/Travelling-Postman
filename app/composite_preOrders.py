@@ -89,31 +89,31 @@ def receive_order():
     # for key in order:
     #     print(key, order[key])
 
-    # quantity = request.form['quantity']
-    # po_id = request.form['poid']
-    # item_name = request.form['item_name']
-    # requester_id = request.form['requester']
-    # price = request.form['price']
+    quantity = order['quantity']
+    po_id = order['poid']
+    item_name = order['item_name']
+    requester_id = order['requester']
+    price = order['price']
 
-    # PARAMS = jsonify({
-    #     'quantity':quantity,
-    #     'po_id': po_id,
-    #     'item_name': item_name,
-    #     'requester_id':requester_id,
-    #     'price':price
-    #     })
+    PARAMS = jsonify({
+        'quantity':quantity,
+        'po_id': po_id,
+        'item_name': item_name,
+        'requester_id':requester_id,
+        'price':price
+        })
 
-    # print(PARAMS)
+    print(PARAMS)
 
-    # redirectURL = url_for('redirectToPayment', quantity=quantity, po_id=po_id, item_name=item_name, requester_id=requester_id, price=price) 
+    redirectURL = url_for('redirectToPayment', quantity=quantity, po_id=po_id, item_name=item_name, requester_id=requester_id, price=price) 
 
-    # redirectURL = redirectURL[1:]
+    redirectURL = redirectURL[1:]
     
-    # serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
+    serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
     
-    # r = redirect(serviceURL)
+    r = redirect(serviceURL)
    
-    # print('Sent to sucessful_payment.html')
+    print('Sent to sucessful_payment.html')
 
 
 
