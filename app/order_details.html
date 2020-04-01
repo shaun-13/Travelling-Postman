@@ -116,11 +116,12 @@
         // - using await requires the function that calls it to be async
         $(async() => {           
             // Change serviceURL to your own
-            var url = document.URL;
-            var sub = url.substring(url.lastIndexOf('?') + 1);
-            var quantity = sub.substring(sub.indexOf('=')+ 1, sub.indexOf('&'));
-            var po_id = sub.substring(sub.lastIndexOf('=') + 1);
+            // var url = document.URL;
+            // var sub = url.substring(url.lastIndexOf('?') + 1);
+            // var quantity = sub.substring(sub.indexOf('=')+ 1, sub.indexOf('&'));
+            // var po_id = sub.substring(sub.lastIndexOf('=') + 1);
 
+            // fetch data from composite ms
             var serviceURL = "http://127.0.0.1:5000/preorders" + "/" + po_id;
             try {
                 const response =
@@ -171,22 +172,19 @@
                         $(async (event) => {
                         //Prevents screen from refreshing when submitting
                         event.preventDefault();
-                        var cfmorderURL = "http://127.0.0.1:5000/paymentConfirmed/";
+                        var cfmorderURL = "http://127.0.0.1:5001/paymentConfirmed/";
                         var homeURL = "http://127.0.0.1/Travelling-Postman/app/requester.html";
   
+                        //var requester_id = sessionStorage.getItem('user_id');
                         try {
                             const response =
                                 await fetch(
-                                    serviceURL, {
+                                    cfmorderURL, {
                                     method: 'POST',
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({ 
-                                      traveller_id: traveller_id, 
-                                      country: country, 
-                                      end_date: end_date,
-                                      item_name: item_name,
-                                      item_category: item_category,
-                                      price: price,
+                                      po_id: po_id,
+                                      requester_id: requester_id,
                                       quantity: quantity
                                     })
                                 });

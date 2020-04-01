@@ -32,6 +32,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
         integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
+
+    <script src="qtyscript.js"></script>
 </head>
 
 <body>
@@ -67,6 +69,8 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
+                <h1 class="h3 mb-3 font-weight-normal">Current Ongoing Pre-orders:</h1><br>
+
                 <div id="posts"></div>
             </div>
         </div>
@@ -84,6 +88,7 @@
         $(async() => {            
             // Change serviceURL to your own
             var serviceURL = "http://127.0.0.1:5000/preorders";
+            var requester_id = sessionStorage.getItem('user_id');
      
             try {
                 const response = await fetch( serviceURL, { method: 'GET' });
@@ -103,6 +108,7 @@
                     {
                         var po_date = new Date(preorder.end_date);
                         var deadline = po_date.getFullYear()+'-'+(po_date.getMonth()+1)+'-'+po_date.getDate();
+                        // console.log(deadline);
 
                         if (deadline >= today)
                         {
@@ -111,23 +117,37 @@
                             "<div class='card mb-4 shadow-sm'>" +
                             "<div class='card-body'>" +
                             "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
+                            "<p class='card-text'>Category: " + preorder.item_category + "</p>" +
                             "<p class='card-text'>Source: " + preorder.country + "</p>" +
-                            "<p class='card-text font-weight-bolder'>" + "Price: $" + preorder.price + "</p>";
+                            "<p class='card-text font-weight-bolder'> Deadline: " + deadline + "</p>" +
+                            "<p class='card-text font-weight-bolder'> Price: $" + preorder.price + "</p>";
 
                             posts +=
-                            "</div><div class='align-bottom'><div class='btn-group'>" +
-                            "<form action='order_details.html' method='get'>" +
-                            "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
-                            "<input type='hidden' value=''><br></form></div></div></div></div></div>";
+                            "<div class='align-bottom'><div class='btn-group'>" +
+                            "<form action='http://127.0.0.1:5001/passToPayment' method='get'>" +
+                            
+                                '<div class="quantity buttons_added">' + 
+                                "<p> Quantity: " + 
+                                    '<input type="button" value="-" class="minus">' + 
+                                    '<input type="number" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">' + 
+                                    '<input type="button" value="+" class="plus">' + 
+                                "</p>" +
+                                '</div> <br>' + 
+                            
+                            "<button type='submit' class='btn btn-sm btn-outline-primary' name='poid' value='" + preorder.po_id +"'>Join Pre-Order</button></p>" +
+                            "<input type='hidden' name='item_name' value='" + preorder.item_name + "'>" +
+                            "<input type='hidden' name='requester' value='" + requester_id + "'>" +
+                            "<input type='hidden' name='price' value='" + preorder.price + "'>" +
+                            "</form></div></div></div></div></div>";
                         }
                     }
                     // add all the rows to the table
-                    $('#posts').append(posts);
+                    $('#posts').append("<div class='row'>" + posts + "<div class='row'>");
                 }
             } catch (error) {
                 // Errors when calling the service; such as network error, 
                 // service offline, etc
-                showError('There is a problem retrieving books data, please try again later.<br />'+error);
+                showError('There is a problem retrieving data, please try again later.<br />'+error);
            
             } // error
         });

@@ -64,11 +64,11 @@ def create_preorder():
     preorder = request.get_json()
 
     new_po = PreOrder(traveller_id=str(preorder['traveller_id']),
-                    country= preorder['country'],
+                    country=preorder['country'],
                     end_date=preorder['end_date'],
                     item_name=preorder['item_name'],
-                    item_category = preorder['item_category'],
-                    price= preorder['price'])
+                    item_category=preorder['item_category'],
+                    price=preorder['price'])
 
     try:
         db.session.add(new_po)

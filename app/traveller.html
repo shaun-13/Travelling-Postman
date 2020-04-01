@@ -69,12 +69,16 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
-                <h1 class="h3 mb-3 font-weight-normal">All Pre-orders:</h1><br>
+                <h1 class="h3 mb-3 font-weight-normal">My Preorders:</h1>
 
 
                 <div class="album py-5 bg-light">
                     <div class="container">
-                        <div id="posts"></div>
+                        <h1 class="h4 mb-3 font-weight-normal">Ongoing Preorders:</h1>
+                        <div id="ongoing"></div>
+                        <br><br>
+                        <h1 class="h4 mb-3 font-weight-normal">Closed Preorders:</h1>
+                        <div id="closed"></div>
                     </div>
                 </div>
 
@@ -88,7 +92,7 @@
 
         function showError(message)
         {
-            $('#posts').append("<p>"+message+"</p>");
+            $('#ongoing').append("<p>"+message+"</p>");
         }
 
         $(async() =>
@@ -96,6 +100,7 @@
             // Change serviceURL to your own
             var traveller_id = sessionStorage.traveller_id;
             console.log(typeof traveller_id);
+            console.log("traveller_id= " + traveller_id);
             var serviceURL = "http://127.0.0.1:5000/preorders/trav/" + traveller_id;
      
             try
@@ -105,23 +110,56 @@
                 var preorders = data.preorders;
      
                 if (response.ok) {
+                    var ongoing = "";
+                    var closed = "";
+                    var date = new Date();
+                    var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+
 
                     for (const preorder of preorders) {
-                        posts +=
-                        "<div class='col-md-4'>" +
-                        "<div class='card mb-4 shadow-sm'>" +
-                        "<div class='card-body'>" +
-                        "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
-                        "<p class='card-text'>Source: " + preorder.country + "</p>" +
-                        "<p class='card-text font-weight-bolder'>" + "Price: $" + preorder.price + "</p>";
+                        var po_date = new Date(preorder.end_date);
+                        var deadline = po_date.getFullYear()+'-'+(po_date.getMonth()+1)+'-'+po_date.getDate();
+                        // console.log(deadline);
 
-                        posts +=
-                        "</div><div class='align-bottom'><div class='btn-group'>" +
-                        "<form action='order_details.html' method='get'>" +
-                        "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Join Pre-Order</button>" +
-                        "<input type='hidden' value=''><br></form></div></div></div></div></div>";
+                        if (deadline >= today){
+                            ongoing +=
+                            "<div class='col-md-4'>" +
+                            "<div class='card mb-4 shadow-sm'>" +
+                            "<div class='card-body'>" +
+                                "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
+                                "<p class='card-text'>Category: " + preorder.item_category + "</p>" +
+                                "<p class='card-text'>Source: " + preorder.country + "</p>" +
+                                "<p class='card-text font-weight-bolder'> Deadline: " + deadline + "</p>" +
+                                "<p class='card-text font-weight-bolder'> Price: $" + preorder.price + "</p>" +
+                            "</div></div></div>";
+
+                            // ongoing +=
+                            // "<div class='align-bottom'><div class='btn-group'>" +
+                            // "<form action='order_details.html' method='get'>" +
+                            // "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Check Details</button>" +
+                            // "<input type='hidden' value=''></form></div></div></div></div></div>";
+                        }
+                        else{
+                            closed +=
+                            "<div class='col-md-4'>" +
+                            "<div class='card mb-4 shadow-sm'>" +
+                            "<div class='card-body'>" +
+                                "<p class='card-text font-weight-bolder'>" + preorder.item_name + "</p>"+
+                                "<p class='card-text'>Category: " + preorder.item_category + "</p>" +
+                                "<p class='card-text'>Source: " + preorder.country + "</p>" +
+                                "<p class='card-text font-weight-bolder'> Deadline: " + deadline + "</p>" +
+                                "<p class='card-text font-weight-bolder'> Price: $" + preorder.price + "</p>" +
+                            "</div></div></div>";
+
+                            // closed +=
+                            // "<div class='align-bottom'><div class='btn-group'>" +
+                            // "<form action='order_details.html' method='get'>" +
+                            // "<button type='submit' class='btn btn-sm btn-outline-primary' name='payment' value='" + preorder.price +"'>Check Details</button>" +
+                            // "<input type='hidden' value=''></form></div></div></div></div></div>";
+                        }
                     }
-                    $('#posts').append(posts);
+                    $('#ongoing').append("<div class='row'>" + ongoing + "<div class='row'>");
+                    $('#closed').append("<div class='row'>" + closed + "<div class='row'>");
                 }
                 else if (!preorders || !preorders.length) {
                     showError('Preorders are empty or undefined.');

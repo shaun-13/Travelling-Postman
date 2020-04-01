@@ -47,14 +47,14 @@ def OrderCreation():
     channel = connection.channel()
 
     # set up the exchange if the exchange doesn't exist
-    exchangename="order_direct"
-    channel.exchange_declare(exchange=exchangename, exchange_type='direct')
+    exchangename="order_topic"
+    channel.exchange_declare(exchange=exchangename, exchange_type='topic')
 
     # prepare a queue for receiving messages
     channelqueue = channel.queue_declare(queue='confirmed_orders', durable=True) # '' indicates a random unique queue name; 'exclusive' indicates the queue is used only by this receiver and will be deleted if the receiver disconnects.
         # If no need durability of the messages, no need durable queues, and can use such temp random queues.
     queue_name = channelqueue.method.queue
-    channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='orders.add') # bind the queue to the exchange via the key
+    channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='orders.*') # bind the queue to the exchange via the key
 
     # set up a consumer and start to wait for coming messages
     channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
@@ -198,6 +198,6 @@ def processOrderLog(order):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5003, debug=True)
     OrderCreation()
     
