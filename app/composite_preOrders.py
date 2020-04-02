@@ -80,9 +80,9 @@ def process_payment(order):
 
     # send the message to confirmed_orders
     channel.queue_declare(queue='confirmed_orders', durable=True) # make sure the queue used by the confirmed_orders exist and durable
-    channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.success') # make sure the queue is bound to the exchange
+    channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.*') # make sure the queue is bound to the exchange
     channel.basic_publish(exchange=exchangename, routing_key="orders.success", body=message)
-    
+
 
 @app.route("/paymentConfirmed/", methods=['POST'])
 def receive_order():
