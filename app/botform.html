@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Requester Home</title>
+
+    <script>
+        if (typeof(Storage) !== "undefined")
+        {
+            sessionStorage.user_id = 333;
+        }
+    </script>
+
+    
+    <!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+    <!-- Bootstrap libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="requester-album.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <script src="qtyscript.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="requester.html" class="navbar-brand d-flex align-items-center">
+                    <img class='mr-2' src='courier-delivery.png' alt='Logo' width="32" height="32">
+                    <strong>Notifications Signups</strong>
+                </a>
+                <div>
+                    <a href="requester.html" class="btn btn-primary">Requester Dashboard</a>
+                    <a href="traveller.html" class="btn btn-primary">Traveller Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <h1 class="h3 mb-3 font-weight-normal">Sign up for Telegram notifications here if you haven't done so!</h1>
+                <br>
+                
+                <ul>
+                    <h1 class="h4 mb-3 font-weight-normal">Step 1: </h1>
+                    <h1 class="h5 mb-3 font-weight-normal">Talk to our Telegram bot at  
+                        <a href="https://telegram.me/travellingpostbot" target="_blank">@travellingpostbot</a>
+                    </h1>
+                    
+                    <h1 class="h6 mb-3 text-muted"><i>Just drop us a message, nothing too fancy, a hi will do!</i></h1>
+                    <br>
+                    <h1 class="h4 mb-3 font-weight-normal">Step 2: </h1>
+                    <h1 class="h5 mb-3 font-weight-normal">Let us know your Telegram username!</h1>
+                    <form id = "your_form" onsubmit='signup()'>
+                        <div class="form-group"> 
+                          <input type="teleuser" class="form-control" id="teleuser" placeholder="Enter your Telegram username" required>
+                          <small id="teleuserhelp" class="form-text text-muted">We will never share your Telegram username with anyone else.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up!</button>
+                    </form>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            var userid = sessionStorage.getItem('user_id');
+            console.log(userid);
+            
+            function signup(){
+                var teleuser = document.getElementById('teleuser').value;
+                var url = 'http://127.0.0.1:5005/' + userid + "/" + teleuser;
+                console.log(teleuser);
+                console.log(url);
+                // var win = window.open(url, '_blank');
+                alert("You have successfully signed up for notifications!");
+                // window.location.replace("requester.html");
+                // window.location.href = "requester.html";
+                window.open("requester.html");
+            }
+            
+        </script>
+    </main>
+
+    <footer class="text-muted">
+        <div class="container">
+            <p class="float-right">
+                <a href="#">Back to top</a>
+            </p>
+            <p>Boop.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

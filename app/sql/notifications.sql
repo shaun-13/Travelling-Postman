@@ -36,7 +36,8 @@ DROP TABLE IF EXISTS `tele_details`;
 CREATE TABLE IF NOT EXISTS `tele_details` (
   `userid` varchar(10) CHARACTER SET utf8 NOT NULL,
   `teleuserid` varchar(20) CHARACTER SET utf8 NOT NULL,
-  `telechatid` varchar(80) CHARACTER SET utf8 NOT NULL
+  `telechatid` varchar(80) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (userid,teleuserid)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
