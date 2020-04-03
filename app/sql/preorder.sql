@@ -50,10 +50,12 @@ CREATE TABLE IF NOT EXISTS `preorder_details` (
 --
 
 INSERT INTO `preorder_details` (`po_id`, `traveller_id`, `country`, `end_date`, `item_name`, `item_category`, `price`) VALUES
-(1, '333', 'Iceland', '2019-01-01', 'chinese bowl', 'food', '23.20'),
-(11, '333', 'Norway', '2020-05-01', 'Salomon', 'fish', '44.50'),
-(12, '333', 'India', '2020-04-01', 'Gods', 'statue', '10.45'),
-(55, '100', 'brazil', '2020-01-11', 'hair', 'clothes', '23.40');
+(1, '333', 'Iceland', '2019-01-01', 'Chinese Bowl', 'Vintage Goods', '23.20'),
+(11, '333', 'Norway', '2020-05-01', 'Salmon', 'Food and Beverages', '44.50'),
+(12, '333', 'Japan', '2020-04-01', 'Naruto Figurine', 'Toys', '20.45'),
+(55, '100', 'Brazil', '2020-07-11', 'Limited Edition Gucci Laptop Cover SS20', "Books and Stationery", '750'),
+(56, '100', 'Australia', '2020-04-29', "Talking Kangaroo Soft Toy", 'Toys', '99.99'),
+(57, '333', 'Japan', '2020-10-13', 'Signed BTS Poster by BTS Jimin', 'Entertainment', '1310.95');
 
 -- --------------------------------------------------------
 
