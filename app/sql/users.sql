@@ -36,7 +36,8 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS user_details;
 CREATE TABLE IF NOT EXISTS user_details (
   user_id varchar(32) NOT NULL,
-  name varchar(100) NOT NULL
+  name varchar(100) NOT NULL,
+  PRIMARY KEY (user_id)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
