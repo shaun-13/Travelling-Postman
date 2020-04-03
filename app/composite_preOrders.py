@@ -123,7 +123,6 @@ def receive_order():
 
 
 
-    process_payment(order)
     return jsonify(order), status
 
     

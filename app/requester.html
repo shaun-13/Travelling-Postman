@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width">
 
     <title>Requester Home</title>
+    
+    <script>
+        if (typeof(Storage) !== "undefined")
+        {
+            requester_id = sessionStorage.getItem('user_id') ;
+            console.log(requester_id);
+        }
+    </script>
 
     
     <!--[if lt IE 9]>
