@@ -75,7 +75,7 @@
                     <br>
                     <h1 class="h4 mb-3 font-weight-normal">Step 2: </h1>
                     <h1 class="h5 mb-3 font-weight-normal">Let us know your Telegram username!</h1>
-                    <form id = "your_form" onsubmit='signup()'>
+                    <form id = "form">
                         <div class="form-group"> 
                           <input type="teleuser" class="form-control" id="teleuser" placeholder="Enter your Telegram username" required>
                           <small id="teleuserhelp" class="form-text text-muted">We will never share your Telegram username with anyone else.</small>
@@ -88,19 +88,20 @@
 
         <script>
             var userid = sessionStorage.getItem('user_id');
-            console.log(userid);
-            
-            function signup(){
-                var teleuser = document.getElementById('teleuser').value;
-                var url = 'http://127.0.0.1:5005/' + userid + "/" + teleuser;
-                console.log(teleuser);
-                console.log(url);
-                // var win = window.open(url, '_blank');
-                alert("You have successfully signed up for notifications!");
-                // window.location.replace("requester.html");
-                // window.location.href = "requester.html";
-                window.open("requester.html");
-            }
+            // console.log(userid);
+
+            $(function() {
+                $(document).on("submit", "#form", function(event){
+                    var teleuser = document.getElementById('teleuser').value;
+                    var url = 'http://127.0.0.1:5005/' + userid + "/" + teleuser;
+                $.get( url )
+                .done(function( data ) {
+                    alert("You have successfully signed up for notifications!");
+                    window.location.href = "./requester.html";
+                });
+                return false;
+                });
+            });
             
         </script>
     </main>
