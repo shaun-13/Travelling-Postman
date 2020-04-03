@@ -98,6 +98,12 @@
                 .done(function( data ) {
                     alert("You have successfully signed up for notifications!");
                     window.location.href = "./requester.html";
+                })
+                .fail(function(data){
+                    // alert(data["message"]);
+                    console.log(JSON.stringify(data));
+                    alert("Please check your Telegram username again! :( \n" + 
+                         "Username is case sensitive!");
                 });
                 return false;
                 });
