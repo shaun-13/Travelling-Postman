@@ -63,6 +63,7 @@ def processOrderLog(order):
     requester_id = order['requester_id']
     quantity = order['quantity']
     order = Confirmed_order(po_id= po_id, requester_id= requester_id, quantity= quantity)
+    print('$$$$$$$$$$$$$$$$')
     print(order.__dict__)
 
     status = 201

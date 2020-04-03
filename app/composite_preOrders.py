@@ -121,7 +121,7 @@ def receive_order():
    
     print('Sent to sucessful_payment.html')
 
-
+    process_payment(order)
 
     return jsonify(order), status
 
