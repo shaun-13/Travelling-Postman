@@ -142,7 +142,18 @@
 
                         var total = price * quantity;
 
-                        $("#receipt_item").text(item_name);
+                        var name = '';
+                        var i;
+                        for (i = 0; i < item_name.length; i++) {
+                            if (item_name[i] == "+"){
+                                name += " "
+                            }
+                            else{
+                                name += item_name[i]
+                            }            
+                        };
+
+                        $("#receipt_item").text(name);
                         $("#receipt_quantity").text(quantity);
                         $("#receipt_total").text(total);
                                     }

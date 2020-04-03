@@ -140,8 +140,20 @@
 
             var total = Math.round((price * quantity)*100)/100;
 
+            // var name = item_name.replace("+", " ");
+            var name = '';
+            var i;
+            for (i = 0; i < item_name.length; i++) {
+              if (item_name[i] == "+"){
+                name += " "
+              }
+              else{
+                name += item_name[i]
+              }            
+            };
+
             $("#price").text(price);
-            $("#item_name").text(item_name);
+            $("#item_name").text(name);
             $("#quantity").text(quantity);
             $("#total").text(total);
 
@@ -197,6 +209,7 @@
                         // relocate to home page
                         
                         console.log("weewoo yoohoo!!!");
+                        alert("Payment has been made successfully made!")
                         window.location.replace(successURL+get_params);
                         return false;
                     } else {
