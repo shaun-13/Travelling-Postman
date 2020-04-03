@@ -114,15 +114,22 @@
                     var ongoing = "";
                     var closed = "";
                     var date = new Date();
-                    var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+
+                    // var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+                    // var today = date.now();
+                    console.log(typeof(date));
+                    console.log(date);
 
 
                     for (const preorder of preorders) {
                         var po_date = new Date(preorder.end_date);
                         var deadline = po_date.getFullYear()+'-'+(po_date.getMonth()+1)+'-'+po_date.getDate();
-                        // console.log(deadline);
+                        // console.log(preorder.item_name + ":" + deadline);
+                        // console.log(deadline >= today);
+                        // console.log("deadline: " + typeof(deadline));
+                        // console.log("today: " + typeof(today));
 
-                        if (deadline >= today){
+                        if (po_date >= date){
                             ongoing +=
                             "<div class='col-md-4'>" +
                             "<div class='card mb-4 shadow-sm'>" +

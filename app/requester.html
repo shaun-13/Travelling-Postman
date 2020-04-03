@@ -103,7 +103,7 @@
                     // for loop to setup all table rows with obtained book data
                     var posts = "";
                     var date = new Date();
-                    var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+                    // var today = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 
                     for (const preorder of preorders)
                     {
@@ -111,7 +111,7 @@
                         var deadline = po_date.getFullYear()+'-'+(po_date.getMonth()+1)+'-'+po_date.getDate();
                         // console.log(deadline);
 
-                        if (deadline >= today)
+                        if (po_date >= date)
                         {
                             posts +=
                             "<div class='col-md-4'>" +
