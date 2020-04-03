@@ -36,11 +36,11 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `preorder_details`;
 CREATE TABLE IF NOT EXISTS `preorder_details` (
   `po_id` int(10) NOT NULL AUTO_INCREMENT,
-  `traveller_id` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `traveller_id` varchar(100) CHARACTER SET utf8 NOT NULL,
   `country` varchar(80) CHARACTER SET utf8 NOT NULL,
   `end_date` date NOT NULL,
-  `item_name` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `item_category` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `item_name` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `item_category` varchar(100) CHARACTER SET utf8 NOT NULL,
   `price` decimal(8,2) NOT NULL,
   PRIMARY KEY (`po_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
