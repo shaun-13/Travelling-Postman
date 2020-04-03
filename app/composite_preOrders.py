@@ -97,7 +97,7 @@ def receive_order():
     po_id = order['po_id']
     item_name = order['item_name']
     requester_id = order['requester_id']
-    price = order['price']
+    price = order['total']
 
     PARAMS = jsonify({
         'quantity':quantity,

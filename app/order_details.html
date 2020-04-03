@@ -138,7 +138,7 @@
             console.log("requester_id = " + requester_id);
             console.log("price = " + price);
 
-            var total = price * quantity;
+            var total = Math.round((price * quantity)*100)/100;
 
             $("#price").text(price);
             $("#item_name").text(item_name);
@@ -159,53 +159,57 @@
               },
               onApprove: function(data, actions) {
                 // This function captures the funds from the transaction.
-                return actions.order.capture().then(function(details) {
+                
                   // This function shows a transaction success message to your buyer.
-                  alert('Transaction completed by ' + details.payer.name.given_name);
+                  
 
                   // call composite function to add requestor to orders
                   // post order details to confirmed orders
 
                   $(async (event) => {
                   //Prevents screen from refreshing when submitting
-                  event.preventDefault();
+                  // event.preventDefault();
                   var cfmorderURL = "http://127.0.0.1:5001/paymentConfirmed/";
-                  var homeURL = "./requester.html";
+                  var successURL = "./successful_payment.html";
 
                   //var requester_id = sessionStorage.getItem('user_id');
-                  try {
-                      const response =
-                          await fetch(
-                              cfmorderURL, {
-                              method: 'POST',
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ 
-                                po_id: po_id,
-                                requester_id: requester_id,
-                                quantity: quantity,
-                                total : total
-                              })
-                          });
-                      const data = await response.json();
+                  
+                    const response =
+                        await fetch(
+                            cfmorderURL, {
+                            method: 'POST',
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ 
+                              po_id: po_id,
+                              requester_id: requester_id,
+                              quantity: quantity,
+                              total : total,
+                              item_name : item_name
+                            })
+                        });
+                    const data = await response.json();
+                    console.log(data);
+                    console.log(response);
 
-                      if (response.ok) {
-                          // relocate to home page
-                          console.log("weewoo yoohoo!!!");
-                          window.location.replace(homeURL);
-                          return false;
-                      } else {
-                          console.log(data);
-                          showError(data.message);
-                      }
-                  } catch (error) {
-                      // Errors when calling the service; such as network error, 
-                      // service offline, etc
-                      showError
-                          ("There is a problem confirming payment, please try again later. " + error);
+                    get_params = '?po_id=' + po_id + '&requester_id=' + requester_id + '&quantity=' + quantity + '&price=' + total + '&item_name=' + item_name;
 
-                  } // error
+                    if (response.ok) {
+                        // relocate to home page
+                        
+                        console.log("weewoo yoohoo!!!");
+                        window.location.replace(successURL+get_params);
+                        return false;
+                    } else {
+                        console.log(data);
+                        showError(data.message);
+                    }
+                 
+                  
+                  return actions.order.capture().then(function(details) {
+                    alert('Transaction completed by ' + details.payer.name.given_name);
                   });
                 });
+                
               }
             }).render('#paypal-button-container');
             //This function displays Smart Payment Buttons on your web page.
