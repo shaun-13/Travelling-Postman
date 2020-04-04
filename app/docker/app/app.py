@@ -8,8 +8,8 @@ import pika
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/notifications'
-# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/notifications'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -71,5 +71,5 @@ def insert_chatid(userid, teleid):
 
 
 if __name__=='__main__':
-    app.run(host="127.0.0.1", port=5005, debug=True)
-    # app.run(host="0.0.0.0", port=5005, debug=True)
+    # app.run(host="127.0.0.1", port=5005, debug=True)
+    app.run(host="0.0.0.0", port=5005, debug=True)
