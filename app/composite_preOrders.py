@@ -78,10 +78,27 @@ def process_payment(order):
     # prepare the message body content
     message = json.dumps(order, default=str) # convert a JSON object to a string
 
-    # send the message to confirmed_orders
-    channel.queue_declare(queue='confirmed_orders', durable=True) # make sure the queue used by the confirmed_orders exist and durable
-    channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.*') # make sure the queue is bound to the exchange
-    channel.basic_publish(exchange=exchangename, routing_key="orders.success", body=message)
+    channel.queue_declare(queue='', durable=True) # make sure the queue is durable
+    channel.queue_bind(exchange=exchangename, queue='', routing_key='order.success') # make sure the queue is bound to the exchange
+    channel.basic_publish(exchange=exchangename, routing_key="order.success", body=message,
+        properties=pika.BasicProperties(delivery_mode = 2) # make message persistent within the matching queues until it is received by some receiver (the matching queues have to exist and be durable and bound to the exchange)
+    )
+
+    # channel.queue_declare(queue='notification', durable=True) # make sure the queue used by the error handler exist and durable
+    # channel.queue_bind(exchange=exchangename, queue='notification', routing_key='order.success') # make sure the queue is bound to the exchange
+    # channel.basic_publish(exchange=exchangename, routing_key="order.success", body=message,
+    #     properties=pika.BasicProperties(delivery_mode = 2) # make message persistent within the matching queues until it is received by some receiver (the matching queues have to exist and be durable and bound to the exchange)
+    # )
+
+    #close the connection to the broker
+    connection.close()
+
+
+
+    # # send the message to confirmedOrders2.py
+    # channel.queue_declare(queue='confirmed_orders', durable=True) # make sure the queue used by the confirmed_orders exist and durable
+    # channel.queue_bind(exchange=exchangename, queue='confirmed_orders', routing_key='orders.*') # make sure the queue is bound to the exchange
+    # channel.basic_publish(exchange=exchangename, routing_key="orders.success", body=message)
 
 
 @app.route("/paymentConfirmed/", methods=['POST'])
