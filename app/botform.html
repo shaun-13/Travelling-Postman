@@ -11,7 +11,8 @@
     <script>
         if (typeof(Storage) !== "undefined")
         {
-            sessionStorage.user_id = 333;
+            var userid = sessionStorage.getItem('user_id') ;
+            
         }
     </script>
 
@@ -87,7 +88,7 @@
         </div>
 
         <script>
-            var userid = sessionStorage.getItem('user_id');
+            // var userid = sessionStorage.getItem('user_id');
             // console.log(userid);
 
             $(function() {

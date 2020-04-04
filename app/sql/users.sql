@@ -45,10 +45,10 @@ CREATE TABLE IF NOT EXISTS user_details (
 -- Dumping data for table user_details
 --
 
-INSERT INTO user_details (user_id, `name`) VALUES
-(1111111111, 'Ahmad Sultiman'),
-(1111111112, 'Rachel Bargaros');
-COMMIT;
+-- INSERT INTO user_details (user_id, `name`) VALUES
+-- (1111111111, 'Ahmad Sultiman'),
+-- (1111111112, 'Rachel Bargaros');
+-- COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
