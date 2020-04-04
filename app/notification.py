@@ -69,14 +69,27 @@ def callback(channel, method, properties, body):
     print() # print another new line as a separator
 
 def processOrder(order):
+#
+#     Order details:
+# {'po_id': '90', 'requester_id': '10215444379333051', 'quantity': 5, 'item_name': 'Bananas', 'total': 55.23}
+
+
+
     print("Sending a message:")
-    # print(order)
+    print('Order details:')
+    print(order)
+    print()
     userid = order['requester_id']
+
+    quantity = order['quantity']
+    item_name = order['item_name']
+    total = order['total']
+
     cuser = Person.query.filter_by(userid=userid).first()
     chatid = str(cuser.telechatid)
     bot_token = '1076658459:AAHwvu83zFLd803XwCa6yBip6j0vwA1Ax5s'
     # chatid = '410414385'
-    bot_message = "You have successfully registered for your preorder"
+    bot_message = "You have successfully registered for your preorder for " + str(quantity) + ' ' + item_name + ' at $' + str(total) + '. Thank you!' 
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chatid + '&parse_mode=Markdown&text=' + bot_message
     response = requests.get(send_text)
     print(response.json())
