@@ -130,7 +130,7 @@ def receive_order():
 
     redirectURL = redirectURL[1:]
     
-    serviceURL = 'http://localhost/app/successful_payment.html' + redirectURL
+    serviceURL = 'http://localhost/ESD/app/successful_payment.html' + redirectURL
     
     r = redirect(serviceURL)
     print(serviceURL)
