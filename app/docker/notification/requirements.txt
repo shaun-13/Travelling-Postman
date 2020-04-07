@@ -3,3 +3,4 @@ Flask-Cors==3.0.8
 Flask-SQLAlchemy==2.4.1
 mysql-connector-python==8.0.19
 pika==1.1.0
+requests==2.22.0
