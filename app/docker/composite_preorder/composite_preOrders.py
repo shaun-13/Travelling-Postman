@@ -5,8 +5,8 @@ import json
 from os import environ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
 
 @app.route('/')
@@ -144,6 +144,13 @@ def receive_order():
 
     return jsonify(order), status
 
+@app.route("/testservice")
+def testservice():
+    print('#'*20)
+    print('Service is working!')
+    print('#'*20)
+    PARAMS = jsonify({'Response': 'ok'})
+    return PARAMS, 201
     
 #     return jsonify({"books": [book.json() for book in Book.query.all()]})
 
