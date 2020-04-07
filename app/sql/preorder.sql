@@ -66,7 +66,7 @@ INSERT INTO `preorder_details` (`po_id`, `traveller_id`, `country`, `end_date`, 
 DROP TABLE IF EXISTS `registered_users`;
 CREATE TABLE IF NOT EXISTS `registered_users` (
   `po_id` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
-  `requester_id` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
+  `requester_id` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
   `paid_status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 COMMIT;
