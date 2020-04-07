@@ -12,8 +12,13 @@
 
         <!-- Get user id in session when using the app -->
         <script type="text/JavaScript">
-            if (typeof(Storage) !== "undefined") {
-                sessionStorage.traveller_id = 333;
+            if (sessionStorage.getItem("user_id") === null) {
+                alert("Your session has expired, please log in again!")
+                window.location.replace("login.html");
+            }
+            else{
+                var traveller_id = sessionStorage.getItem('user_id') ;
+                console.log(traveller_id);
             }
         </script>
 
@@ -370,7 +375,6 @@
         </div>
 
         <script>
-            console.log(sessionStorage.traveller_id);
             function showError(message) {
                 $('#main-container').hide();
         
@@ -384,7 +388,6 @@
                 var homeURL = "traveller.html";
 
                 //var traveller_id = Math.floor(Math.random() * 999) + 100;
-                var traveller_id = sessionStorage.traveller_id;
                 var item_name = $('#inputName').val();
                 var item_category= $('#inputCategory').val();
                 var country= $('#inputCountry').val();

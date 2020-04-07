@@ -9,9 +9,12 @@
     <title>Requester Home</title>
     
     <script>
-        if (typeof(Storage) !== "undefined")
-        {
-            requester_id = sessionStorage.getItem('user_id') ;
+        if (sessionStorage.getItem("user_id") === null) {
+            alert("Your session has expired, please log in again!")
+            window.location.replace("login.html");
+        }
+        else{
+            var requester_id = sessionStorage.getItem('user_id') ;
             console.log(requester_id);
         }
     </script>

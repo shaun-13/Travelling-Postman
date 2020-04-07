@@ -9,9 +9,13 @@
     <title>Traveller Home</title>
 
     <script>
-        if (typeof(Storage) !== "undefined")
-        {
-            sessionStorage.traveller_id = 333;
+        if (sessionStorage.getItem("user_id") === null) {
+            alert("Your session has expired, please log in again!")
+            window.location.replace("login.html");
+        }
+        else{
+            var traveller_id = sessionStorage.getItem('user_id') ;
+            console.log(traveller_id);
         }
     </script>
 
@@ -99,7 +103,6 @@
         $(async() =>
         {            
             // Change serviceURL to your own
-            var traveller_id = sessionStorage.traveller_id;
             console.log(typeof traveller_id);
             console.log("traveller_id= " + traveller_id);
             var serviceURL = "http://127.0.0.1:5000/preorders/trav/" + traveller_id;
