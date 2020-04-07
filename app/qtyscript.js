@@ -1,3 +1,5 @@
+// code for the + - quantity buttons on requester.html page
+
 function wcqib_refresh_quantity_increments() {
     jQuery("div.quantity:not(.buttons_added), td.quantity:not(.buttons_added)").each(function(a, b) {
         var c = jQuery(b);
